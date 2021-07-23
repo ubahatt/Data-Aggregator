@@ -3,6 +3,10 @@ NPI DATA PIPELINE VERSION 0
 README 
 This file contains instructions on how to operate the current version of the NPI Data Pipeline Tool.
 
+TO RUN
+1. Download repository and open it in VS.
+2. Click Start Button to run Tool.
+
 PREREQUISITES
 1. In order to preserve integrity of original data, create a holding cell for original files you wish to combine
 2. After storing original data in a holding cell (seperate folder), create a new folder and copy the data to it
