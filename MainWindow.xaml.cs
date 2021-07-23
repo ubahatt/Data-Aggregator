@@ -40,6 +40,7 @@ namespace DataPipeline
         private string child = "D:\\Testfolder2";
         private ObservableCollection<MyModel> lt = new ObservableCollection<MyModel>();
         private MyModel myModel;
+        
 
         // THIS JUST MAKES THE WINDOW EXIST, IT'S PRETTY RAD NGL
         public MainWindow()
@@ -266,9 +267,13 @@ namespace DataPipeline
         // MAYBE COPY BUTTON FORMAT INTO FORMAT MISMATCH AS FAR AS METADATA GOES
         private void Button_Format(object sender, RoutedEventArgs e)
         {
-            if (parent == "D:\\Testfolder" || child == "D:\\Testfolder2")
+            // USER INPUT FOR FILE NAME
+            var newFileName = "";
+            newFileName = fileNameTextBox.Text;
+
+            if (parent == "D:\\Testfolder" || child == "D:\\Testfolder2" || newFileName == "")
             {
-                MessageBox.Show("Please select both a Parent and Child Folder prior to formatting data.", "Notification");
+                MessageBox.Show("Please select both a Parent and Child Folder AND enter a name for your master file prior to formatting data.", "Notification");
             }
             else
             {
@@ -341,9 +346,7 @@ namespace DataPipeline
                 // NOTIFICATION ALLOWING USER TO SEE IF SOMETHING WAS DONE WITHOUT THE PROGRAM BREAKING
                 MessageBox.Show("Data Formatting Complete!", "Notification");
 
-                // USER INPUT FOR FILE NAME
-                string newFileName;
-                newFileName = fileNameTextBox.Text;
+                
 
                 // FILE COMBINATION CODE
                 string sourceFolder = parent;
@@ -375,7 +378,7 @@ namespace DataPipeline
                         lines = lines.Skip(lineSkip).ToArray(); // Skip header row for all but first file
                     }
 
-                    MessageBox.Show(lineSkip.ToString(), "Notification");
+                    //MessageBox.Show(lineSkip.ToString(), "Notification");
 
                     foreach (string line in lines)
                     {
