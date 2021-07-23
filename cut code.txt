@@ -1,0 +1,18 @@
+        // CURRENTLY IRRELEVANT AS IT IS NOT USED FOR ANYTHING
+        // DELETE THIS IN THE FUTURE
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> ltForSave = new List<string>();
+            foreach (MyModel obj in myList.ItemsSource)
+            {
+                if (obj.StatusForCheckBox == false)
+                {
+                    ltForSave.Add(";" + obj.Name);
+                }
+                else
+                {
+                    ltForSave.Add(obj.Name);
+                }
+            }
+            //Save ltForSave for ini file.
+        }
