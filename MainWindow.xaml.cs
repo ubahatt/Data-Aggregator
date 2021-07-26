@@ -40,7 +40,6 @@ namespace DataPipeline
         private string child = "D:\\Testfolder2";
         private ObservableCollection<MyModel> lt = new ObservableCollection<MyModel>();
         private MyModel myModel;
-        
 
         // THIS JUST MAKES THE WINDOW EXIST, IT'S PRETTY RAD NGL
         public MainWindow()
@@ -270,6 +269,8 @@ namespace DataPipeline
             // USER INPUT FOR FILE NAME
             var newFileName = "";
             newFileName = fileNameTextBox.Text;
+            int lineSkip;
+            lineSkip = Convert.ToInt32(headerLinesTextBox.Text);
 
             if (parent == "D:\\Testfolder" || child == "D:\\Testfolder2" || newFileName == "")
             {
@@ -283,7 +284,6 @@ namespace DataPipeline
                 string path = parent;
                 string[] files = Directory.GetFiles(path, "*.csv", SearchOption.AllDirectories);
                 CultureInfo provider = CultureInfo.InvariantCulture;
-                int lineSkip = 1;
 
                 foreach (string s in files)
                 {
@@ -301,17 +301,20 @@ namespace DataPipeline
                     var line2 = "";
                     string[] line_number = File.ReadAllLines(s);
 
-                    // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
-                    if (String.Equals(line1.Substring(0, 9), "Time (sec)"))
-                    {
-                        date_input = date_default;
-                    }
-                    else
-                    {
-                        line1 = line1.Replace("GUI Compile Date: ", "");
-                        DateTime date = DateTime.Parse(line1);
-                        date_input = date.ToString();
-                    }
+                    // GRAB DATA FROM USER FOR HEADER LINE AMOUNT
+                    if (lineSkip == 100000)
+
+                        // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
+                        if (String.Equals(line1.Substring(0, 9), "Time (sec)"))
+                        {
+                            date_input = date_default;
+                        }
+                        else
+                        {
+                            line1 = line1.Replace("GUI Compile Date: ", "");
+                            DateTime date = DateTime.Parse(line1);
+                            date_input = date.ToString();
+                        }
 
                     /*
                     // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
@@ -332,21 +335,20 @@ namespace DataPipeline
                     //string Firmware_Header_B = blah blah;
                     //string Firmware_Header_C = blah blah;
 
+                    // MAKE IT SO METADATA IS NOT APPENDED TO HEADER LINES
                     var csv = File.ReadLines(s) // not AllLines
-                        .Select((line, index) => index == 0
-                            // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
-                            ? line + "File_Name" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
-                            : line + fileName + "," + date_input + "," + /*Firmware_Header_A*/ "N/A" + ","
-                                   + firm_B_input + "," + /*Firmware_Header_C*/ "N/A" + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
-                        .ToList(); // we should write into the same file, that´s why we materialize
+                    .Select((line, index) => index == lineSkip
+                        // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
+                        ? line + "File_Name" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
+                        : line + fileName + "," + date_input + "," + /*Firmware_Header_A*/ "N/A" + ","
+                               + firm_B_input + "," + /*Firmware_Header_C*/ "N/A" + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
+                    .ToList(); // we should write into the same file, that´s why we materialize
 
                     File.WriteAllLines(s, csv);
                 }
 
                 // NOTIFICATION ALLOWING USER TO SEE IF SOMETHING WAS DONE WITHOUT THE PROGRAM BREAKING
                 MessageBox.Show("Data Formatting Complete!", "Notification");
-
-                
 
                 // FILE COMBINATION CODE
                 string sourceFolder = parent;
@@ -362,20 +364,18 @@ namespace DataPipeline
                     string file = filePaths[i];
                     string[] lines = File.ReadAllLines(file);
 
-                    if (i > 0)
+                    // REMOVES HEADER DATA POST PROCESS FOR FIRST FILE
+                    if (i == 0)
                     {
-                        /*
-                        int line_number = 0;
-                        do
-                        {
-                            line_number++;
-                            lineSkip++;
-                        } while (lines[i].Substring(line_number, 1) != "T");
-                        */
-                        // INTABIO
-                        //lines = lines.Skip(1).ToArray(); // Skip header row for all but first file
                         // STANDARD
                         lines = lines.Skip(lineSkip).ToArray(); // Skip header row for all but first file
+                    }
+
+                    // REMOVES HEADER DATA POST PROCESS FOR ALL FILES AFTER THE FIRST ONE
+                    if (i > 0)
+                    {
+                        // STANDARD
+                        lines = lines.Skip(lineSkip + 1).ToArray(); // Skip header row for all but first file
                     }
 
                     //MessageBox.Show(lineSkip.ToString(), "Notification");
