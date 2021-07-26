@@ -1,4 +1,7 @@
-﻿using System;
+﻿// DATA PIPELINE TOOL @ GENER8
+// UDI BAHATT
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -126,9 +129,9 @@ namespace DataPipeline
             var newFileName = "";
             newFileName = fileNameTextBox.Text;
             int lineSkip = 0;
-            
 
             // MAIN LOOP FOR THE FUNCTION
+
             // THROWS USERS A MESSAGE INCASE CERTAIN FIELDS ARE MISSING IN WINDOW
             if (parent == "D:\\Testfolder" || child == "D:\\Testfolder2" || newFileName == "" || String.IsNullOrEmpty(headerLinesTextBox.Text))
             {
@@ -143,7 +146,7 @@ namespace DataPipeline
                 CultureInfo provider = CultureInfo.InvariantCulture;
 
                 // MOVED THIS LINE FROM 269 TO HERE DUE TO FORMATTING
-                // LINE TAKES IN INPUT FROM HEADER LINE NUMBER LINE AND TURNS IT INTO INT TO BE USED LATER 
+                // LINE TAKES IN INPUT FROM HEADER LINE NUMBER LINE AND TURNS IT INTO INT TO BE USED LATER
                 lineSkip = Convert.ToInt32(headerLinesTextBox.Text);
 
                 foreach (string s in files)
