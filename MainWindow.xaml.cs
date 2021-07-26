@@ -300,47 +300,26 @@ namespace DataPipeline
                     string line1 = File.ReadLines(s).First();
                     var line2 = "";
                     string[] line_number = File.ReadAllLines(s);
+                    string fileCreationTime = File.GetCreationTime(s).ToString();
 
-                    // GRAB DATA FROM USER FOR HEADER LINE AMOUNT
-                    if (lineSkip == 100000)
-
-                        // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
-                        if (String.Equals(line1.Substring(0, 9), "Time (sec)"))
-                        {
-                            date_input = date_default;
-                        }
-                        else
-                        {
-                            line1 = line1.Replace("GUI Compile Date: ", "");
-                            DateTime date = DateTime.Parse(line1);
-                            date_input = date.ToString();
-                        }
-
-                    /*
                     // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
-                    if (String.Equals(line_number[1].Substring(0, 1), "M"))
+                    if (String.Equals(line1.Substring(0, 9), "Time (sec)"))
                     {
-                        line2 = line_number[1];
-                        line2 = line2.Replace("MAIN FW Version/CRC:,", "");
-                        line2 = line2.Replace(",", "_");
-                        firm_B_input = line2;
+                        date_input = date_default;
                     }
                     else
                     {
-                        firm_B_input = firm_B_default;
+                        line1 = line1.Replace("GUI Compile Date: ", "");
+                        DateTime date = DateTime.Parse(line1);
+                        date_input = date.ToString();
                     }
-                    */
-
-                    //string Firmware_Header_A = blah blah;
-                    //string Firmware_Header_B = blah blah;
-                    //string Firmware_Header_C = blah blah;
 
                     // MAKE IT SO METADATA IS NOT APPENDED TO HEADER LINES
                     var csv = File.ReadLines(s) // not AllLines
                     .Select((line, index) => index == lineSkip
                         // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
-                        ? line + "File_Name" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
-                        : line + fileName + "," + date_input + "," + /*Firmware_Header_A*/ "N/A" + ","
+                        ? line + "File_Name" + ",File_Creation_Date" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
+                        : line + fileName + "," + fileCreationTime + "," + date_input + "," + /*Firmware_Header_A*/ "N/A" + ","
                                + firm_B_input + "," + /*Firmware_Header_C*/ "N/A" + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
                     .ToList(); // we should write into the same file, that´s why we materialize
 
