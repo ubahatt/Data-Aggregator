@@ -49,7 +49,7 @@ namespace DataPipeline
 
         // SELECT FILE PATH USES THIS
         // CHOOSES A CHILD FOLDER SUCH THAT WE CAN TEST THE TRANSFER OF FILES FROM ONE FOLDER TO THE OTHER
-        private void Button_Click_Receiver(object sender, RoutedEventArgs e)
+        private void Button_Click_ChildFolder(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog openFileDlg = new System.Windows.Forms.FolderBrowserDialog();
             var result = openFileDlg.ShowDialog();
@@ -62,7 +62,7 @@ namespace DataPipeline
 
         // OPEN PARENT FOLDER USES THIS
         // CHOOSES A FILE TO OPEN AND SEE FILES WITHIN THAT ONE
-        private void Button_Open_Click(object sender, RoutedEventArgs e)
+        private void Button_Open_ParentFolder(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog openFileDlg = new System.Windows.Forms.FolderBrowserDialog();
             var result = openFileDlg.ShowDialog();
@@ -73,8 +73,218 @@ namespace DataPipeline
             parent = txtPath.Text;
         }
 
-        // DEPRECATED ?
-        // COMBINE DATA BUTTON USES THIS
+        // DISPLAYS FOLDER CONTENTS ON THE TEXTBOX RIGHTSIDE OF SCREEN
+        // YOU CAN SPECIFY FILE TYPE, SEE COMMENT BLOCK BELOW
+        private void Button_DisplayFolderContent(object sender, RoutedEventArgs e)
+        {
+            if (parent == "D:\\Testfolder")
+            {
+                MessageBox.Show("Please select a Parent Folder prior to displaying files.", "Notification");
+            }
+            else
+            {
+                lt = new ObservableCollection<MyModel>();
+
+                /*
+                    ATTENTION, IN ORDER TO DETERMINE WHAT KIND OF FILE YOU WANT TO LOOK FOR, JUST CHANGE THE EXTENSION YOU SEARCH FOR
+                    IN THE LINE BELOW THE BLOCK COMMENT. FOR EXAMPLE, WE ARE LOOKING FOR .CSV SO WE ENTER "*.CSV" BUT IF WE WANTED
+                    TO LOOK FOR .TXT WE ENTER "*.TXT" RATHER THAN "*.CSV".
+
+                    ALTERNATIVELY, JUST UNCOMMENT LINE THE COMMENTED LINE BELOW THE STRING[] AND COMMENT OUT THE ONE ON TOP
+                */
+
+                string[] dicFileList = Directory.GetFiles(parent); // This lets us see all the files within the folder rather than a certain type of file
+                                                                   // This one below lets you only display files of a certain type, and if you want to change that type just change .txt to .csv or whatever
+                                                                   // you need to be able to see.
+                                                                   // string[] dicFileList = Directory.GetFiles(parent, "*.txt", SearchOption.AllDirectories);
+                foreach (string element in dicFileList)
+                {
+                    myModel = new MyModel();
+
+                    // These 2 lines determine whether you want to include the file type extension in the display window.
+                    // Just comment out one or the other in order to display or not display extensions.
+                    myModel.Name = System.IO.Path.GetFileName(element);
+                    // myModel.Name = System.IO.Path.GetFileNameWithoutExtension(element);
+                    myModel.StatusForCheckBox = false;
+
+                    lt.Add(myModel);
+                }
+                myList.ItemsSource = lt;
+            }
+        }
+
+        // IM NOT SURE WHAT THIS FUNCTION IS DOING, BUT THE APP DOES NOT RUN WITHOUT IT
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+        }
+
+        // FORMATTING FUNCTION
+        // TAKES IN FILES FROM PARENT FOLDER, FORMATS THEM ACCORDINGLY WITH METADATA, THEN DUMPS INTO ONE MASTER FILE INTO CHILD FOLDER
+        private void Button_FormatAndTransfer(object sender, RoutedEventArgs e)
+        {
+            // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
+            var newFileName = "";
+            newFileName = fileNameTextBox.Text;
+            int lineSkip = 0;
+            
+
+            // MAIN LOOP FOR THE FUNCTION
+            // THROWS USERS A MESSAGE INCASE CERTAIN FIELDS ARE MISSING IN WINDOW
+            if (parent == "D:\\Testfolder" || child == "D:\\Testfolder2" || newFileName == "" || String.IsNullOrEmpty(headerLinesTextBox.Text))
+            {
+                MessageBox.Show("Please select both a Parent and Child Folder AND enter both the number of header lines a name for your master file prior to formatting data.", "Notification");
+            }
+            // MAIN LOOP ITSELF
+            else
+            {
+                // VARIABLES - ASSIGN FILE PATH FROM INPUT BASED ON PRIOR FUNCTIONS
+                string path = parent;
+                string[] files = Directory.GetFiles(path, "*.csv", SearchOption.AllDirectories);
+                CultureInfo provider = CultureInfo.InvariantCulture;
+
+                // MOVED THIS LINE FROM 269 TO HERE DUE TO FORMATTING
+                // LINE TAKES IN INPUT FROM HEADER LINE NUMBER LINE AND TURNS IT INTO INT TO BE USED LATER 
+                lineSkip = Convert.ToInt32(headerLinesTextBox.Text);
+
+                foreach (string s in files)
+                {
+                    // EXTRACTING DATA FROM FILES
+                    string fileName = Path.GetFileName(s);
+                    string date_default = "N/A";
+                    var date_input = "N/A";
+                    var firm_A_default = "N/A";
+                    var firm_B_default = "N/A";
+                    var firm_B_input = "N/A";
+                    var firm_C_default = "N/A";
+
+                    // GRABBING DATE DATA FROM THE FILE
+                    string line1 = File.ReadLines(s).First();
+                    string[] line_number = File.ReadAllLines(s);
+                    string fileCreationTime = File.GetCreationTime(s).ToString();
+
+                    // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
+                    if (String.Equals(line1.Substring(0, 9), "Time (sec)"))
+                    {
+                        date_input = date_default;
+                    }
+                    else
+                    {
+                        line1 = line1.Replace("GUI Compile Date: ", "");
+                        DateTime date = DateTime.Parse(line1);
+                        date_input = date.ToString();
+                    }
+
+                    // MAKE IT SO METADATA IS NOT APPENDED TO HEADER LINES
+                    var csv = File.ReadLines(s) // not AllLines
+                    .Select((line, index) => index == lineSkip
+                        // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
+                        ? line + "File_Name" + ",File_Creation_Date" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
+                        : line + fileName + "," + fileCreationTime + "," + date_input + "," + /*Firmware_Header_A*/ "N/A" + ","
+                               + firm_B_input + "," + /*Firmware_Header_C*/ "N/A" + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
+                    .ToList(); // we should write into the same file, that´s why we materialize
+
+                    File.WriteAllLines(s, csv);
+                }
+
+                // NOTIFICATION ALLOWING USER TO SEE IF SOMETHING WAS DONE WITHOUT THE PROGRAM BREAKING
+                MessageBox.Show("Data Formatting Complete!", "Notification");
+
+                // FILE COMBINATION CODE
+                string sourceFolder = parent;
+                string destinationFile = child + "\\" + newFileName + ".csv";
+
+                // Specify wildcard search to match CSV files that will be combined
+                string[] filePaths = Directory.GetFiles(sourceFolder);
+                StreamWriter fileDest = new StreamWriter(destinationFile, true);
+
+                int i;
+                for (i = 0; i < filePaths.Length; i++)
+                {
+                    string file = filePaths[i];
+                    string[] lines = File.ReadAllLines(file);
+
+                    // REMOVES HEADER DATA POST PROCESS FOR FIRST FILE
+                    if (i == 0)
+                    {
+                        // STANDARD
+                        lines = lines.Skip(lineSkip).ToArray(); // Skip header row for all but first file
+                    }
+
+                    // REMOVES HEADER DATA POST PROCESS FOR ALL FILES AFTER THE FIRST ONE
+                    if (i > 0)
+                    {
+                        // STANDARD
+                        lines = lines.Skip(lineSkip + 1).ToArray(); // Skip header row for all but first file
+                    }
+
+                    foreach (string line in lines)
+                    {
+                        fileDest.WriteLine(line);
+                    }
+                }
+                fileDest.Close();
+
+                MessageBox.Show("Files have been combined!", "Notification");
+            }
+        }
+
+        // TESTING FUNCTION
+        private void Button_Format_2(object sender, RoutedEventArgs e)
+        {
+            // ADDING NEW DATA TO THE END OF THE FILE
+            // CURRENTLY THIS ADDS THE FILENAME TO THE END OF THE CSV IN IT'S OWN NEW COLUMN
+            // CAN EDIT AREA AFTER TO ADD ANY OTHER RELEVANT METADATA
+            string path = parent;
+            string[] files = Directory.GetFiles(path, "*.csv", SearchOption.AllDirectories);
+
+            foreach (string s in files)
+            {
+                // EXTRACTING DATA FROM FILES
+                string fileName = Path.GetFileName(s);
+                //string GUI_Comp_Date = blah blah;
+                //string Firmware_Header_A = blah blah;
+                //string Firmware_Header_B = blah blah;
+                //string Firmware_Header_C = blah blah;
+
+                var csv = File.ReadLines(s) // not AllLines
+                    .Select((line, index) => index == 0
+                    // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
+                        ? line + "File_Name" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
+                        : line + fileName + "," + /*GUI_Compile_Data*/ "N/A" + "," + /*Firmware_Header_A*/ "N/A" + ","
+                               + /*Firmware_Header_B*/ "N/A" + "," + /*Firmware_Header_C*/ "N/A" + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
+                    .ToList(); // we should write into the same file, that´s why we materialize
+
+                File.WriteAllLines(s, csv);
+            }
+
+            // NOTIFICATION ALLOWING USER TO SEE IF SOMETHING WAS DONE WITHOUT THE PROGRAM BREAKING
+            MessageBox.Show("Data Formatting Complete!", "Notification");
+
+            // USER INPUT FOR FILE NAME
+            string newFileName;
+            newFileName = fileNameTextBox.Text;
+
+            // FILE COMBINATION CODE
+            string sourceFolder = parent;
+            string destinationFile = child + "\\" + newFileName + ".csv";
+
+            // Specify wildcard search to match CSV files that will be combined
+            string[] filePaths = Directory.GetFiles(sourceFolder);
+            StreamWriter fileDest = new StreamWriter(destinationFile, true);
+
+            /*
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.InitialDirectory = @"C:\temp\";
+            fileDialog.Multiselect = true;
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string[] files = fileDialog.FileNames;
+            }
+            */
+        }
+
+        // DEPRECATED FUNCTIONS BELOW
+
         private void Button_Transfer(object sender, RoutedEventArgs e)
         {
             string fileName = "test.txt";
@@ -167,269 +377,49 @@ namespace DataPipeline
             MessageBox.Show("Files Combined!", "Notification");
         }
 
-        // DISPLAY FOLDER CONTENTS USES THIS
-        // SHOWS THE RELEVANT FILES OF THE SPECIFIC TYPE (CURRENTLY USING .CSV) IN THE SPACE TO THE
-        // RIGHT OF THE FILE PATHS
-        //
-        // YOU CAN SPECIFY FILE TYPE, SEE COMMENT BLOCK BELOW
-        private void Button_Display(object sender, RoutedEventArgs e)
-        {
-            if (parent == "D:\\Testfolder")
-            {
-                MessageBox.Show("Please select a Parent Folder prior to displaying files.", "Notification");
-            }
-            else
-            {
-                lt = new ObservableCollection<MyModel>();
-
-                /*
-                    ATTENTION, IN ORDER TO DETERMINE WHAT KIND OF FILE YOU WANT TO LOOK FOR, JUST CHANGE THE EXTENSION YOU SEARCH FOR
-                    IN THE LINE BELOW THE BLOCK COMMENT. FOR EXAMPLE, WE ARE LOOKING FOR .CSV SO WE ENTER "*.CSV" BUT IF WE WANTED
-                    TO LOOK FOR .TXT WE ENTER "*.TXT" RATHER THAN "*.CSV".
-
-                    ALTERNATIVELY, JUST UNCOMMENT LINE THE COMMENTED LINE BELOW THE STRING[] AND COMMENT OUT THE ONE ON TOP
-                */
-
-                string[] dicFileList = Directory.GetFiles(parent); // This lets us see all the files within the folder rather than a certain type of file
-                                                                   // This one below lets you only display files of a certain type, and if you want to change that type just change .txt to .csv or whatever
-                                                                   // you need to be able to see.
-                                                                   // string[] dicFileList = Directory.GetFiles(parent, "*.txt", SearchOption.AllDirectories);
-                foreach (string element in dicFileList)
-                {
-                    myModel = new MyModel();
-
-                    // These 2 lines determine whether you want to include the file type extension in the display window.
-                    // Just comment out one or the other in order to display or not display extensions.
-                    myModel.Name = System.IO.Path.GetFileName(element);
-                    // myModel.Name = System.IO.Path.GetFileNameWithoutExtension(element);
-                    myModel.StatusForCheckBox = false;
-
-                    lt.Add(myModel);
-                }
-                myList.ItemsSource = lt;
-            }
-        }
-
-        // IM NOT SURE WHAT THIS FUNCTION IS DOING, BUT THE APP DOES NOT RUN WITHOUT IT
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-        }
-
         /*
-        // DEPRECATED
-        // DELETE THIS IN THE FUTURE
-        private void Save_Click(object sender, RoutedEventArgs e)
-        {
-            List<string> ltForSave = new List<string>();
-            foreach (MyModel obj in myList.ItemsSource)
-            {
-                if (obj.StatusForCheckBox == false)
-                {
-                    ltForSave.Add(";" + obj.Name);
-                }
-                else
-                {
-                    ltForSave.Add(obj.Name);
-                }
-            }
-            //Save ltForSave for ini file.
-        }
+     // DEPRECATED
+     // DELETE THIS IN THE FUTURE
+     private void Save_Click(object sender, RoutedEventArgs e)
+     {
+         List<string> ltForSave = new List<string>();
+         foreach (MyModel obj in myList.ItemsSource)
+         {
+             if (obj.StatusForCheckBox == false)
+             {
+                 ltForSave.Add(";" + obj.Name);
+             }
+             else
+             {
+                 ltForSave.Add(obj.Name);
+             }
+         }
+         //Save ltForSave for ini file.
+     }
 
-        // DEPRECATED
-        // DELETE LATER
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            // Create OpenFileDialog
-            Microsoft.Win32.OpenFileDialog Search = new Microsoft.Win32.OpenFileDialog();
+     // DEPRECATED
+     // DELETE LATER
+     private void Button_Click_1(object sender, RoutedEventArgs e)
+     {
+         // Create OpenFileDialog
+         Microsoft.Win32.OpenFileDialog Search = new Microsoft.Win32.OpenFileDialog();
 
-            // Set filter for file extension and default file extension
-            Search.DefaultExt = ".ini";
-            Search.Filter = "File ini (*.ini)|*.ini";
+         // Set filter for file extension and default file extension
+         Search.DefaultExt = ".ini";
+         Search.Filter = "File ini (*.ini)|*.ini";
 
-            // Display OpenFileDialog by calling ShowDialog method
-            Nullable<bool> result = Search.ShowDialog();
+         // Display OpenFileDialog by calling ShowDialog method
+         Nullable<bool> result = Search.ShowDialog();
 
-            // Get the selected file name and display in a TextBox
-            if (result == true)
-            {
-                // Open document
-                string filename = Search.FileName;
-                file_receiver.Text = filename;
-            }
-        }
-        */
-
-        // FORMATS DATA THEN COMBINES IT INTO ONE FILE
-        // ASSIGN FILES AS BOTH PARENT AND CHILD
-        // FORMAT THEM - ADDING EXTRA HEADER LINE FOR FILE NAME, GUI, AND OTHER
-        // ONCE WE GET THAT DATA WE CAN PARSE IT AND ASSIGN BEFOR THE FOREACH LOOP
-        // MAYBE COPY BUTTON FORMAT INTO FORMAT MISMATCH AS FAR AS METADATA GOES
-        private void Button_Format(object sender, RoutedEventArgs e)
-        {
-            // USER INPUT FOR FILE NAME
-            var newFileName = "";
-            newFileName = fileNameTextBox.Text;
-            int lineSkip;
-            lineSkip = Convert.ToInt32(headerLinesTextBox.Text);
-
-            if (parent == "D:\\Testfolder" || child == "D:\\Testfolder2" || newFileName == "")
-            {
-                MessageBox.Show("Please select both a Parent and Child Folder AND enter a name for your master file prior to formatting data.", "Notification");
-            }
-            else
-            {
-                // ADDING NEW DATA TO THE END OF THE FILE
-                // CURRENTLY THIS ADDS THE FILENAME TO THE END OF THE CSV IN IT'S OWN NEW COLUMN
-                // CAN EDIT AREA AFTER TO ADD ANY OTHER RELEVANT METADATA
-                string path = parent;
-                string[] files = Directory.GetFiles(path, "*.csv", SearchOption.AllDirectories);
-                CultureInfo provider = CultureInfo.InvariantCulture;
-
-                foreach (string s in files)
-                {
-                    // EXTRACTING DATA FROM FILES
-                    string fileName = Path.GetFileName(s);
-                    string date_default = "N/A";
-                    var date_input = "N/A";
-                    var firm_A_default = "N/A";
-                    var firm_B_default = "N/A";
-                    var firm_B_input = "N/A";
-                    var firm_C_default = "N/A";
-
-                    // GRABBING DATE DATA FROM THE FILE
-                    string line1 = File.ReadLines(s).First();
-                    var line2 = "";
-                    string[] line_number = File.ReadAllLines(s);
-                    string fileCreationTime = File.GetCreationTime(s).ToString();
-
-                    // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
-                    if (String.Equals(line1.Substring(0, 9), "Time (sec)"))
-                    {
-                        date_input = date_default;
-                    }
-                    else
-                    {
-                        line1 = line1.Replace("GUI Compile Date: ", "");
-                        DateTime date = DateTime.Parse(line1);
-                        date_input = date.ToString();
-                    }
-
-                    // MAKE IT SO METADATA IS NOT APPENDED TO HEADER LINES
-                    var csv = File.ReadLines(s) // not AllLines
-                    .Select((line, index) => index == lineSkip
-                        // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
-                        ? line + "File_Name" + ",File_Creation_Date" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
-                        : line + fileName + "," + fileCreationTime + "," + date_input + "," + /*Firmware_Header_A*/ "N/A" + ","
-                               + firm_B_input + "," + /*Firmware_Header_C*/ "N/A" + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
-                    .ToList(); // we should write into the same file, that´s why we materialize
-
-                    File.WriteAllLines(s, csv);
-                }
-
-                // NOTIFICATION ALLOWING USER TO SEE IF SOMETHING WAS DONE WITHOUT THE PROGRAM BREAKING
-                MessageBox.Show("Data Formatting Complete!", "Notification");
-
-                // FILE COMBINATION CODE
-                string sourceFolder = parent;
-                string destinationFile = child + "\\" + newFileName + ".csv";
-
-                // Specify wildcard search to match CSV files that will be combined
-                string[] filePaths = Directory.GetFiles(sourceFolder);
-                StreamWriter fileDest = new StreamWriter(destinationFile, true);
-
-                int i;
-                for (i = 0; i < filePaths.Length; i++)
-                {
-                    string file = filePaths[i];
-                    string[] lines = File.ReadAllLines(file);
-
-                    // REMOVES HEADER DATA POST PROCESS FOR FIRST FILE
-                    if (i == 0)
-                    {
-                        // STANDARD
-                        lines = lines.Skip(lineSkip).ToArray(); // Skip header row for all but first file
-                    }
-
-                    // REMOVES HEADER DATA POST PROCESS FOR ALL FILES AFTER THE FIRST ONE
-                    if (i > 0)
-                    {
-                        // STANDARD
-                        lines = lines.Skip(lineSkip + 1).ToArray(); // Skip header row for all but first file
-                    }
-
-                    //MessageBox.Show(lineSkip.ToString(), "Notification");
-
-                    foreach (string line in lines)
-                    {
-                        fileDest.WriteLine(line);
-                    }
-                }
-                fileDest.Close();
-
-                MessageBox.Show("Files have been combined!", "Notification");
-            }
-        }
-
-        // TESTING FUNCTION
-        private void Button_Format_2(object sender, RoutedEventArgs e)
-        {
-            // ADDING NEW DATA TO THE END OF THE FILE
-            // CURRENTLY THIS ADDS THE FILENAME TO THE END OF THE CSV IN IT'S OWN NEW COLUMN
-            // CAN EDIT AREA AFTER TO ADD ANY OTHER RELEVANT METADATA
-            string path = parent;
-            string[] files = Directory.GetFiles(path, "*.csv", SearchOption.AllDirectories);
-
-            foreach (string s in files)
-            {
-                // EXTRACTING DATA FROM FILES
-                string fileName = Path.GetFileName(s);
-                //string GUI_Comp_Date = blah blah;
-                //string Firmware_Header_A = blah blah;
-                //string Firmware_Header_B = blah blah;
-                //string Firmware_Header_C = blah blah;
-
-                var csv = File.ReadLines(s) // not AllLines
-                    .Select((line, index) => index == 0
-                    // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
-                        ? line + "File_Name" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
-                        : line + fileName + "," + /*GUI_Compile_Data*/ "N/A" + "," + /*Firmware_Header_A*/ "N/A" + ","
-                               + /*Firmware_Header_B*/ "N/A" + "," + /*Firmware_Header_C*/ "N/A" + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
-                    .ToList(); // we should write into the same file, that´s why we materialize
-
-                File.WriteAllLines(s, csv);
-            }
-
-            // NOTIFICATION ALLOWING USER TO SEE IF SOMETHING WAS DONE WITHOUT THE PROGRAM BREAKING
-            MessageBox.Show("Data Formatting Complete!", "Notification");
-
-            // USER INPUT FOR FILE NAME
-            string newFileName;
-            newFileName = fileNameTextBox.Text;
-
-            // FILE COMBINATION CODE
-            string sourceFolder = parent;
-            string destinationFile = child + "\\" + newFileName + ".csv";
-
-            // Specify wildcard search to match CSV files that will be combined
-            string[] filePaths = Directory.GetFiles(sourceFolder);
-            StreamWriter fileDest = new StreamWriter(destinationFile, true);
-
-            /*
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.InitialDirectory = @"C:\temp\";
-            fileDialog.Multiselect = true;
-            if (fileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string[] files = fileDialog.FileNames;
-            }
-            */
-        }
-
-        /*
-        private void Button_Format_Mismatch(object sender, RoutedEventArgs e)
-        {
-        }
-        */
+         // Get the selected file name and display in a TextBox
+         if (result == true)
+         {
+             // Open document
+             string filename = Search.FileName;
+             file_receiver.Text = filename;
+         }
+     }
+     */
     }
 
     public class MyModel
