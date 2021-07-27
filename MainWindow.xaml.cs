@@ -167,11 +167,14 @@ namespace DataPipeline
                     // GENERAL IDEA IS RUN DO/WHILE LOOP THAT INCREMENTS WHEN STRING NOT = TO TIME
                     //string[] lineArray = File.ReadAllLines(s);
                     //int t = 0;
+                    //bool tf;
                     //do
                     //{
+                    //    tf = String.Equals(lineArray[t].Substring(0, 9), "Time (sec)");
                     //    lineSkip++;
                     //    t++;
-                    //} while (!String.Equals(lineArray[t].Substring(0, 9), "Time (sec)"));
+                    //} while (tf == false);
+                    //MessageBox.Show(lineSkip.ToString(), "Notification");
 
                     // GRABBING DATE DATA FROM THE FILE
                     string line1 = File.ReadLines(s).First();
