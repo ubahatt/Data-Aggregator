@@ -96,10 +96,12 @@ namespace DataPipeline
                     ALTERNATIVELY, JUST UNCOMMENT LINE THE COMMENTED LINE BELOW THE STRING[] AND COMMENT OUT THE ONE ON TOP
                 */
 
-                string[] dicFileList = Directory.GetFiles(parent); // This lets us see all the files within the folder rather than a certain type of file
-                                                                   // This one below lets you only display files of a certain type, and if you want to change that type just change .txt to .csv or whatever
-                                                                   // you need to be able to see.
-                                                                   // string[] dicFileList = Directory.GetFiles(parent, "*.txt", SearchOption.AllDirectories);
+                // This lets us see all the files within the folder rather than a certain type of file
+                // This one below lets you only display files of a certain type, and if you want to change that type just change .txt to .csv or whatever
+                // you need to be able to see.
+                // string[] dicFileList = Directory.GetFiles(parent, "*.txt", SearchOption.AllDirectories);
+                string[] dicFileList = Directory.GetFiles(parent);
+
                 foreach (string element in dicFileList)
                 {
                     myModel = new MyModel();
