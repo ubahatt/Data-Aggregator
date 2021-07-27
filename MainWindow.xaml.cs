@@ -156,9 +156,15 @@ namespace DataPipeline
                     string date_default = "N/A";
                     var date_input = "N/A";
                     var firm_A_default = "N/A";
+                    var firm_A_input = "N/A";
                     var firm_B_default = "N/A";
                     var firm_B_input = "N/A";
                     var firm_C_default = "N/A";
+                    var firm_C_input = "N/A";
+
+                    // AUTO FILE HEADER LINE CALCULATION
+                    //string[] currentLine = File.ReadAllLines(s);
+                    //int line_num = 0;
 
                     // GRABBING DATE DATA FROM THE FILE
                     string line1 = File.ReadLines(s).First();
@@ -182,8 +188,8 @@ namespace DataPipeline
                     .Select((line, index) => index == lineSkip
                         // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
                         ? line + "File_Name" + ",File_Creation_Date" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
-                        : line + fileName + "," + fileCreationTime + "," + date_input + "," + /*Firmware_Header_A*/ "N/A" + ","
-                               + firm_B_input + "," + /*Firmware_Header_C*/ "N/A" + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
+                        : line + fileName + "," + fileCreationTime + "," + date_input + "," + firm_A_input + ","
+                               + firm_B_input + "," + firm_C_input + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
                     .ToList(); // we should write into the same file, that´s why we materialize
 
                     File.WriteAllLines(s, csv);
