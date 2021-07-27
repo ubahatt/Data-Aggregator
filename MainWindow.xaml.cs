@@ -163,8 +163,15 @@ namespace DataPipeline
                     var firm_C_input = "N/A";
 
                     // AUTO FILE HEADER LINE CALCULATION
-                    //string[] currentLine = File.ReadAllLines(s);
-                    //int line_num = 0;
+                    // I NEED TO FIGURE THIS OUT
+                    // GENERAL IDEA IS RUN DO/WHILE LOOP THAT INCREMENTS WHEN STRING NOT = TO TIME
+                    //string[] lineArray = File.ReadAllLines(s);
+                    //int t = 0;
+                    //do
+                    //{
+                    //    lineSkip++;
+                    //    t++;
+                    //} while (!String.Equals(lineArray[t].Substring(0, 9), "Time (sec)"));
 
                     // GRABBING DATE DATA FROM THE FILE
                     string line1 = File.ReadLines(s).First();
@@ -193,6 +200,9 @@ namespace DataPipeline
                     .ToList(); // we should write into the same file, that´s why we materialize
 
                     File.WriteAllLines(s, csv);
+
+                    // CAN COMMENT THIS LINE BELOW OUT IF NEED BE
+                    //lineSkip = 0;
                 }
 
                 // NOTIFICATION ALLOWING USER TO SEE IF SOMETHING WAS DONE WITHOUT THE PROGRAM BREAKING
