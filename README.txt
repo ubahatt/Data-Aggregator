@@ -12,8 +12,8 @@ PREREQUISITES
 3. Now you're ready to use the tool :) !
 
 USAGE
-1. Ensure that your original data is stored in a holding cell prior to usage of the tool. THIS STEP IS VERY IMPORTANT!!!
-2. Open the tool.
+1. Ensure that your original data is stored in a holding cell prior to usage of the tool. THIS STEP IS VERY IMPORTANT AS IT ENSURES THE INTEGRITY AND PURITY OF ORIGINAL DATA!!!
+2. Open the tool through the Data_Pipeline.exe.
 3. Designate a Parent Folder - Folder that the data from the holding cell is copied into. This is the folder holding the copy of the original data and will be the files that we are formatting and then combining.
 4. Click "Display Folder Contents" button - This button will display the contents of the Parent Folder on the box to the right side of the screen. Use this to confirm you have selected the correct folder.
 5. Designate a Child Folder - This is the folder that will contain the combined data of all the files within the Parent Folder.
