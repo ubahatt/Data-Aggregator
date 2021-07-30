@@ -4,7 +4,7 @@ README
 This file contains instructions on how to operate the current version of the NPI Data Pipeline Tool.
 
 TO RUN
-1. Download the repository then run the executable "Data Pipeline".
+1. Download the repository then run the executable "Data_Pipeline.exe".
 
 PREREQUISITES
 1. In order to preserve integrity of original data, create 3 differing folders; A holding cell, parent folder, and child folder. The holding cell is responsible for holding the original copy of the data you are working with, and both parent and child folder are there to be used by the tool.
