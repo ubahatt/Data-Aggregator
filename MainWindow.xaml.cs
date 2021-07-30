@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Text.RegularExpressions;
 
 namespace DataPipeline
 {
@@ -179,15 +180,15 @@ namespace DataPipeline
                     //MessageBox.Show(lineSkip.ToString(), "Notification");
 
                     // GRABBING DATE DATA FROM THE FILE
-                    string line1 = File.ReadLines(s).First();
+                    var line1 = File.ReadLines(s).First();
                     string[] line_number = File.ReadAllLines(s);
                     string fileCreationTime = File.GetCreationTime(s).ToString();
 
                     // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
-                    if (String.Equals(line1.Substring(0, 9), "Time (sec)"))
+                    if (String.Equals(line1.Substring(0, 10), "Time (sec)"))
                     {
                         date_input = date_default;
-                    }
+                    } 
                     else
                     {
                         line1 = line1.Replace("GUI Compile Date: ", "");
