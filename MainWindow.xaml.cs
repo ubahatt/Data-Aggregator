@@ -164,9 +164,7 @@ namespace DataPipeline
                     var firm_C_default = "N/A";
                     var firm_C_input = "N/A";
 
-                    // AUTO FILE HEADER LINE CALCULATION
-                    // I NEED TO FIGURE THIS OUT
-                    // GENERAL IDEA IS RUN DO/WHILE LOOP THAT INCREMENTS WHEN STRING NOT = TO TIME
+                    // AUTO HEADER CALCULATION WORKS !
                     //string[] lineArray = File.ReadAllLines(s);
                     //int t = 0;
                     //bool tf;
@@ -176,6 +174,7 @@ namespace DataPipeline
                     //    lineSkip++;
                     //    t++;
                     //} while (tf == false);
+                    //lineSkip = lineSkip - 1;
                     //MessageBox.Show(lineSkip.ToString(), "Notification");
 
                     // GRABBING DATE DATA FROM THE FILE
