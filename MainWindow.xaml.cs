@@ -182,7 +182,7 @@ namespace DataPipeline
                     string[] line_number = File.ReadAllLines(s);
                     string fileCreationTime = File.GetCreationTime(s).ToString();
 
-                    // INCREMENTS AT 1 NOT 0?????
+                    // INCREMENTS AT 1 NOT 0 ?????
                     // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
                     if (String.Equals(line1.Substring(0, 10), "Time (sec)"))
                     {
