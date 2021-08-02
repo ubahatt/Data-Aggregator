@@ -173,7 +173,7 @@ namespace DataPipeline
                     //bool tf;
                     //do
                     //{
-                    //    tf = String.Equals(lineArray[t].Substring(0, 9), "Time (sec)");
+                    //    tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)");
                     //    lineSkip++;
                     //    t++;
                     //} while (tf == false);
