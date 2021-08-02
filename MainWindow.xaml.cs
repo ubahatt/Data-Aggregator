@@ -11,7 +11,6 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Text.RegularExpressions;
 
 namespace DataPipeline
 {
@@ -189,7 +188,7 @@ namespace DataPipeline
                     if (String.Equals(line1.Substring(0, 10), "Time (sec)"))
                     {
                         date_input = date_default;
-                    } 
+                    }
                     else
                     {
                         line1 = line1.Replace("GUI Compile Date: ", "");
