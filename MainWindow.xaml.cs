@@ -231,7 +231,7 @@ namespace DataPipeline
                     if (i == 0)
                     {
                         // STANDARD
-                        lines = lines.Skip(lineSkip).ToArray(); // Skip header row for all but first file
+                        lines = lines.Skip(lineSkip).ToArray(); // Skip header row for first file
                     }
 
                     // REMOVES HEADER DATA POST PROCESS FOR ALL FILES AFTER THE FIRST ONE
@@ -255,56 +255,163 @@ namespace DataPipeline
         // TESTING FUNCTION
         private void Button_Format_2(object sender, RoutedEventArgs e)
         {
-            // ADDING NEW DATA TO THE END OF THE FILE
-            // CURRENTLY THIS ADDS THE FILENAME TO THE END OF THE CSV IN IT'S OWN NEW COLUMN
-            // CAN EDIT AREA AFTER TO ADD ANY OTHER RELEVANT METADATA
-            string path = parent;
-            string[] files = Directory.GetFiles(path, "*.csv", SearchOption.AllDirectories);
+            // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
+            var newFileName = "";
+            newFileName = fileNameTextBox.Text;
+            int lineSkip = 0;
 
-            foreach (string s in files)
+            // MAIN LOOP FOR THE FUNCTION
+
+            // THROWS USERS A MESSAGE INCASE CERTAIN FIELDS ARE MISSING IN WINDOW
+            if (parent == "D:\\Testfolder" || child == "D:\\Testfolder2" || newFileName == "" || String.IsNullOrEmpty(headerLinesTextBox.Text))
             {
-                // EXTRACTING DATA FROM FILES
-                string fileName = Path.GetFileName(s);
-                //string GUI_Comp_Date = blah blah;
-                //string Firmware_Header_A = blah blah;
-                //string Firmware_Header_B = blah blah;
-                //string Firmware_Header_C = blah blah;
+                MessageBox.Show("Please select both a Parent and Child Folder AND enter both the number of header lines a name for your master file prior to formatting data.", "Notification");
+            }
+            // MAIN LOOP ITSELF
+            else
+            {
+                // VARIABLES - ASSIGN FILE PATH FROM INPUT BASED ON PRIOR FUNCTIONS
+                int t = 0;
+                int lineSkipNum = 0;
+                string path = parent;
+                int[] lineSkipArray = new int[99];
+                CultureInfo provider = CultureInfo.InvariantCulture;
+                string[] files = Directory.GetFiles(path, "*.csv", SearchOption.AllDirectories);
 
-                var csv = File.ReadLines(s) // not AllLines
-                    .Select((line, index) => index == 0
-                    // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
-                        ? line + "File_Name" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
-                        : line + fileName + "," + /*GUI_Compile_Data*/ "N/A" + "," + /*Firmware_Header_A*/ "N/A" + ","
-                               + /*Firmware_Header_B*/ "N/A" + "," + /*Firmware_Header_C*/ "N/A" + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
+                // THIS LOOP SHOULD COUNT THE AMOUNT OF LINES, ASSIGN IT TO LINESKIPARRAY PER T, THEN RESET LINESKIP TO 0 FOR THE NEXT FILE
+                foreach (string s in files)
+                {
+                    bool tf;
+                    string[] lineArray = File.ReadAllLines(s);
+
+                    // MAIN LOOP FOR CALCULATING LINESKIP
+                    do
+                    {
+                        tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)");
+                        lineSkip++;
+                    } while (tf == false);
+
+                    //while (tf == false)
+                    //{
+                    //    tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)");
+                    //    lineSkip++;
+                    //}
+
+                    // INCREMENTING LINESKIP BY -1 TO SET IT UP CORRECTLY
+                    lineSkip = lineSkip - 1;
+                    lineSkipArray[t] = lineSkip;
+                    t++;
+
+                    // TESTING MESSAGE BOX
+                    MessageBox.Show(lineSkip.ToString(), "Notification");
+
+                    // RESET LINESKIP TO 0 FOR EACH FILE IN FILES (AN ARRAY OF STRINGS INCLUDING THE NAME OF EACH FILE IN PARENT)
+                    lineSkip = 0;
+                }
+                t = 0;
+
+                foreach (string s in files)
+                {
+                    //int[] lineSkipNum = new int[99];
+
+                    // EXTRACTING DATA FROM FILES
+                    string fileName = Path.GetFileName(s);
+                    string date_default = "N/A";
+                    var date_input = "N/A";
+                    var firm_A_default = "N/A";
+                    var firm_A_input = "N/A";
+                    var firm_B_default = "N/A";
+                    var firm_B_input = "N/A";
+                    var firm_C_default = "N/A";
+                    var firm_C_input = "N/A";
+
+                    // AUTO HEADER CALCULATION WORKS !
+                    //string[] lineArray = File.ReadAllLines(s);
+                    //int t = 0;
+                    //bool tf;
+                    //do
+                    //{
+                    //    tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)");
+                    //    lineSkip++;
+                    //    t++;
+                    //} while (tf == false);
+                    //lineSkip = lineSkip - 1;
+                    //MessageBox.Show(lineSkip.ToString(), "Notification");
+
+                    // GRABBING DATE DATA FROM THE FILE
+                    var line1 = File.ReadLines(s).First();
+                    string[] line_number = File.ReadAllLines(s);
+                    string fileCreationTime = File.GetCreationTime(s).ToString();
+
+                    // INCREMENTS AT 1 NOT 0 ?????
+                    // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
+                    if (String.Equals(line1.Substring(0, 10), "Time (sec)"))
+                    {
+                        date_input = date_default;
+                    }
+                    else
+                    {
+                        line1 = line1.Replace("GUI Compile Date: ", "");
+                        DateTime date = DateTime.Parse(line1);
+                        date_input = date.ToString();
+                    }
+
+                    // MAKE IT SO METADATA IS NOT APPENDED TO HEADER LINES
+                    var csv = File.ReadLines(s) // not AllLines
+                    .Select((line, index) => index == lineSkipArray[lineSkipNum]
+                        // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
+                        ? line + "File_Name" + ",File_Creation_Date" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
+                        : line + fileName + "," + fileCreationTime + "," + date_input + "," + firm_A_input + ","
+                               + firm_B_input + "," + firm_C_input + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
                     .ToList(); // we should write into the same file, that´s why we materialize
 
-                File.WriteAllLines(s, csv);
+                    File.WriteAllLines(s, csv);
+
+                    // CAN COMMENT THIS LINE BELOW OUT IF NEED BE
+                    //lineSkip = 0;
+                    lineSkipNum++;
+                }
+
+                // NOTIFICATION ALLOWING USER TO SEE IF SOMETHING WAS DONE WITHOUT THE PROGRAM BREAKING
+                MessageBox.Show("Data Formatting Complete!", "Notification");
+
+                // FILE COMBINATION CODE
+                string sourceFolder = parent;
+                string destinationFile = child + "\\" + newFileName + ".csv";
+
+                // Specify wildcard search to match CSV files that will be combined
+                string[] filePaths = Directory.GetFiles(sourceFolder);
+                StreamWriter fileDest = new StreamWriter(destinationFile, true);
+
+                int i;
+                for (i = 0; i < filePaths.Length; i++)
+                {
+                    string file = filePaths[i];
+                    string[] lines = File.ReadAllLines(file);
+
+                    // REMOVES HEADER DATA POST PROCESS FOR FIRST FILE
+                    if (i == 0)
+                    {
+                        // STANDARD
+                        lines = lines.Skip(lineSkipArray[i]).ToArray(); // Skip header row for first file
+                    }
+
+                    // REMOVES HEADER DATA POST PROCESS FOR ALL FILES AFTER THE FIRST ONE
+                    if (i > 0)
+                    {
+                        // STANDARD
+                        lines = lines.Skip(lineSkipArray[i] + 1).ToArray(); // Skip header row for all but first file
+                    }
+
+                    foreach (string line in lines)
+                    {
+                        fileDest.WriteLine(line);
+                    }
+                }
+                fileDest.Close();
+
+                MessageBox.Show("Files have been combined!", "Notification");
             }
-
-            // NOTIFICATION ALLOWING USER TO SEE IF SOMETHING WAS DONE WITHOUT THE PROGRAM BREAKING
-            MessageBox.Show("Data Formatting Complete!", "Notification");
-
-            // USER INPUT FOR FILE NAME
-            string newFileName;
-            newFileName = fileNameTextBox.Text;
-
-            // FILE COMBINATION CODE
-            string sourceFolder = parent;
-            string destinationFile = child + "\\" + newFileName + ".csv";
-
-            // Specify wildcard search to match CSV files that will be combined
-            string[] filePaths = Directory.GetFiles(sourceFolder);
-            StreamWriter fileDest = new StreamWriter(destinationFile, true);
-
-            /*
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.InitialDirectory = @"C:\temp\";
-            fileDialog.Multiselect = true;
-            if (fileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string[] files = fileDialog.FileNames;
-            }
-            */
         }
 
         // DEPRECATED FUNCTIONS BELOW
