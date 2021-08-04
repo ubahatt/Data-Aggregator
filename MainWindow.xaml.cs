@@ -253,6 +253,7 @@ namespace DataPipeline
         }
 
         // TESTING FUNCTION
+        // CANT FINISH OR REFINE UNTIL THURSDAY MEETING
         private void Button_Format_2(object sender, RoutedEventArgs e)
         {
             // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
