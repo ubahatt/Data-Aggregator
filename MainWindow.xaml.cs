@@ -382,7 +382,8 @@ namespace DataPipeline
                 // Specify wildcard search to match CSV files that will be combined
                 string[] filePaths = Directory.GetFiles(sourceFolder);
                 StreamWriter fileDest = new StreamWriter(destinationFile, true);
-
+                int lineSkipHeader = 0;
+                lineSkipArray[0] = lineSkipHeader;
                 int i;
                 for (i = 0; i < filePaths.Length; i++)
                 {
@@ -393,14 +394,14 @@ namespace DataPipeline
                     if (i == 0)
                     {
                         // STANDARD
-                        lines = lines.Skip(lineSkipArray[i]).ToArray(); // Skip header row for first file
+                        lines = lines.Skip(lineSkipHeader).ToArray(); // Skip header row for first file
                     }
 
                     // REMOVES HEADER DATA POST PROCESS FOR ALL FILES AFTER THE FIRST ONE
                     if (i > 0)
                     {
                         // STANDARD
-                        lines = lines.Skip(lineSkipArray[i] + 1).ToArray(); // Skip header row for all but first file
+                        lines = lines.Skip(lineSkipHeader + 1).ToArray(); // Skip header row for all but first file
                     }
 
                     foreach (string line in lines)
