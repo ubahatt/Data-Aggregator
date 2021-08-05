@@ -26,4 +26,5 @@ CHANGELOG
 7/23/2021 - Release of beta version for testing.
 7/26/2021 - Added line for header line input. This is used to delete header data post process due to the presence of Metadata on each of the file itself.
 7/26/2021 - Added file creation time functionality.
-7/30/2021 - Version 1 Release
+7/30/2021 - Version 1 Release.
+8/05/2021 - Automatic metadata line calculation.
