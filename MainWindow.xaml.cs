@@ -286,6 +286,7 @@ namespace DataPipeline
                     string[] lineArray = File.ReadAllLines(s);
                     int arrayNum = 0;
                     int t = 0;
+
                     // MAIN LOOP FOR CALCULATING LINESKIP
                     do
                     {
@@ -294,16 +295,10 @@ namespace DataPipeline
                         t++;
                     } while (tf == false);
 
-                    //while (tf == false)
-                    //{
-                    //    tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)");
-                    //    lineSkip++;
-                    //}
-
                     // INCREMENTING LINESKIP BY -1 TO SET IT UP CORRECTLY
                     lineSkip = lineSkip - 1;
                     lineSkipArray[arrayNum] = lineSkip;
-                    
+
                     // TESTING MESSAGE BOX
                     //MessageBox.Show(lineSkipArray[arrayNum].ToString(), "Notification");
 
