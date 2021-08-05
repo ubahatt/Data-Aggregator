@@ -127,6 +127,7 @@ namespace DataPipeline
         // TAKES IN FILES FROM PARENT FOLDER, FORMATS THEM ACCORDINGLY WITH METADATA, THEN DUMPS INTO ONE MASTER FILE INTO CHILD FOLDER
         private void Button_FormatAndTransfer(object sender, RoutedEventArgs e)
         {
+            /*
             // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
             var newFileName = "";
             newFileName = fileNameTextBox.Text;
@@ -250,11 +251,12 @@ namespace DataPipeline
 
                 MessageBox.Show("Files have been combined!", "Notification");
             }
+            */
         }
 
         // TESTING FUNCTION
         // CANT FINISH OR REFINE UNTIL THURSDAY MEETING
-        private void Button_Format_2(object sender, RoutedEventArgs e)
+        private void Button_Format_Better(object sender, RoutedEventArgs e)
         {
             // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
             var newFileName = "";
@@ -262,17 +264,15 @@ namespace DataPipeline
             int lineSkip = 0;
 
             // MAIN LOOP FOR THE FUNCTION
-
             // THROWS USERS A MESSAGE INCASE CERTAIN FIELDS ARE MISSING IN WINDOW
-            if (parent == "D:\\Testfolder" || child == "D:\\Testfolder2" || newFileName == "" || String.IsNullOrEmpty(headerLinesTextBox.Text))
+            if (parent == "D:\\Testfolder" || child == "D:\\Testfolder2" || newFileName == "")
             {
-                MessageBox.Show("Please select both a Parent and Child Folder AND enter both the number of header lines a name for your master file prior to formatting data.", "Notification");
+                MessageBox.Show("Please select both a Parent and Child Folder AND enter both a name for your master file prior to formatting data.", "Notification");
             }
             // MAIN LOOP ITSELF
             else
             {
                 // VARIABLES - ASSIGN FILE PATH FROM INPUT BASED ON PRIOR FUNCTIONS
-                int t = 0;
                 int lineSkipNum = 0;
                 string path = parent;
                 int[] lineSkipArray = new int[99];
@@ -284,12 +284,14 @@ namespace DataPipeline
                 {
                     bool tf;
                     string[] lineArray = File.ReadAllLines(s);
-
+                    int arrayNum = 0;
+                    int t = 0;
                     // MAIN LOOP FOR CALCULATING LINESKIP
                     do
                     {
                         tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)");
                         lineSkip++;
+                        t++;
                     } while (tf == false);
 
                     //while (tf == false)
@@ -300,16 +302,15 @@ namespace DataPipeline
 
                     // INCREMENTING LINESKIP BY -1 TO SET IT UP CORRECTLY
                     lineSkip = lineSkip - 1;
-                    lineSkipArray[t] = lineSkip;
-                    t++;
-
+                    lineSkipArray[arrayNum] = lineSkip;
+                    
                     // TESTING MESSAGE BOX
-                    MessageBox.Show(lineSkip.ToString(), "Notification");
+                    //MessageBox.Show(lineSkipArray[arrayNum].ToString(), "Notification");
 
                     // RESET LINESKIP TO 0 FOR EACH FILE IN FILES (AN ARRAY OF STRINGS INCLUDING THE NAME OF EACH FILE IN PARENT)
                     lineSkip = 0;
+                    arrayNum++;
                 }
-                t = 0;
 
                 foreach (string s in files)
                 {
@@ -325,19 +326,6 @@ namespace DataPipeline
                     var firm_B_input = "N/A";
                     var firm_C_default = "N/A";
                     var firm_C_input = "N/A";
-
-                    // AUTO HEADER CALCULATION WORKS !
-                    //string[] lineArray = File.ReadAllLines(s);
-                    //int t = 0;
-                    //bool tf;
-                    //do
-                    //{
-                    //    tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)");
-                    //    lineSkip++;
-                    //    t++;
-                    //} while (tf == false);
-                    //lineSkip = lineSkip - 1;
-                    //MessageBox.Show(lineSkip.ToString(), "Notification");
 
                     // GRABBING DATE DATA FROM THE FILE
                     var line1 = File.ReadLines(s).First();
@@ -383,8 +371,8 @@ namespace DataPipeline
                 // Specify wildcard search to match CSV files that will be combined
                 string[] filePaths = Directory.GetFiles(sourceFolder);
                 StreamWriter fileDest = new StreamWriter(destinationFile, true);
-                int lineSkipHeader = 0;
-                lineSkipArray[0] = lineSkipHeader;
+                //int lineSkipHeader = 0;
+                //lineSkipArray[0] = lineSkipHeader;
                 int i;
                 for (i = 0; i < filePaths.Length; i++)
                 {
@@ -395,14 +383,14 @@ namespace DataPipeline
                     if (i == 0)
                     {
                         // STANDARD
-                        lines = lines.Skip(lineSkipHeader).ToArray(); // Skip header row for first file
+                        lines = lines.Skip(lineSkipArray[i]).ToArray(); // Skip header row for first file
                     }
 
                     // REMOVES HEADER DATA POST PROCESS FOR ALL FILES AFTER THE FIRST ONE
                     if (i > 0)
                     {
                         // STANDARD
-                        lines = lines.Skip(lineSkipHeader + 1).ToArray(); // Skip header row for all but first file
+                        lines = lines.Skip(lineSkipArray[i] + 1).ToArray(); // Skip header row for all but first file
                     }
 
                     foreach (string line in lines)
