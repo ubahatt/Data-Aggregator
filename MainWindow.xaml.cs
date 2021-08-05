@@ -436,6 +436,7 @@ namespace DataPipeline
                 var fileDate = currentDate.ToString();
 
                 string pathToNewFolder = System.IO.Path.Combine(path, $"Formatted Data {fileDate}");
+                MessageBox.Show(pathToNewFolder, "Notification");
                 DirectoryInfo directory = Directory.CreateDirectory(pathToNewFolder);
                 // Will create if does not already exist (otherwise will ignore)
 
