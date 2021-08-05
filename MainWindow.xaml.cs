@@ -254,8 +254,7 @@ namespace DataPipeline
             */
         }
 
-        // TESTING FUNCTION
-        // CANT FINISH OR REFINE UNTIL THURSDAY MEETING
+        // TESTING FUNCTION - SOMEWHAT REFINED? GONNA ASK ABOUT THIS LATER
         private void Button_Format_Better(object sender, RoutedEventArgs e)
         {
             // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
@@ -307,6 +306,14 @@ namespace DataPipeline
                     arrayNum++;
                 }
 
+                // NEW FODLER CREATION FOR HOLDING TEST DATA
+                //DateTime currentDate = DateTime.Today;
+                //var fileDate = currentDate.ToString();
+
+                //string folderName = parent;
+                //string pathstring = System.IO.Path.Combine(folderName, $"Formatted Data {fileDate}");
+                //System.IO.Directory.CreateDirectory()
+
                 foreach (string s in files)
                 {
                     //int[] lineSkipNum = new int[99];
@@ -315,11 +322,11 @@ namespace DataPipeline
                     string fileName = Path.GetFileName(s);
                     string date_default = "N/A";
                     var date_input = "N/A";
-                    var firm_A_default = "N/A";
+                    //var firm_A_default = "N/A";
                     var firm_A_input = "N/A";
-                    var firm_B_default = "N/A";
+                    //var firm_B_default = "N/A";
                     var firm_B_input = "N/A";
-                    var firm_C_default = "N/A";
+                    //var firm_C_default = "N/A";
                     var firm_C_input = "N/A";
 
                     // GRABBING DATE DATA FROM THE FILE
@@ -349,6 +356,7 @@ namespace DataPipeline
                                + firm_B_input + "," + firm_C_input + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
                     .ToList(); // we should write into the same file, that´s why we materialize
 
+                    // EDITING FUNCTION LOCATION GOES HERE, FIX THIS SOON FOR UPCOMING TESTING
                     File.WriteAllLines(s, csv);
 
                     // CAN COMMENT THIS LINE BELOW OUT IF NEED BE
@@ -374,14 +382,14 @@ namespace DataPipeline
                     string file = filePaths[i];
                     string[] lines = File.ReadAllLines(file);
 
-                    // REMOVES HEADER DATA POST PROCESS FOR FIRST FILE
+                    // REMOVES METADATA LINES POST PROCESS FOR FIRST FILE
                     if (i == 0)
                     {
                         // STANDARD
                         lines = lines.Skip(lineSkipArray[i]).ToArray(); // Skip header row for first file
                     }
 
-                    // REMOVES HEADER DATA POST PROCESS FOR ALL FILES AFTER THE FIRST ONE
+                    // REMOVES METADATA LINES AND HEADER DATA POST PROCESS FOR ALL FILES EXCLUDING THE FIRST
                     if (i > 0)
                     {
                         // STANDARD
@@ -396,6 +404,191 @@ namespace DataPipeline
                 fileDest.Close();
 
                 MessageBox.Show("Files have been combined!", "Notification");
+            }
+        }
+
+        // TESTING FUNCTION - SOMEWHAT REFINED? GONNA ASK ABOUT THIS LATER
+        private void Button_Format_Better_2(object sender, RoutedEventArgs e)
+        {
+            // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
+            var newFileName = "";
+            newFileName = fileNameTextBox.Text;
+            int lineSkip = 0;
+
+            // MAIN LOOP FOR THE FUNCTION
+            // THROWS USERS A MESSAGE INCASE CERTAIN FIELDS ARE MISSING IN WINDOW
+            if (parent == "D:\\Testfolder" /*|| child == "D:\\Testfolder2"*/ || newFileName == "")
+            {
+                MessageBox.Show("Please select a Parent Folder AND enter a name for your master file prior to formatting data.", "Notification");
+            }
+            // MAIN LOOP ITSELF
+            else
+            {
+                // VARIABLES - ASSIGN FILE PATH FROM INPUT BASED ON PRIOR FUNCTIONS
+                int lineSkipNum = 0;
+                string path = parent;
+                int[] lineSkipArray = new int[99];
+                CultureInfo provider = CultureInfo.InvariantCulture;
+                string[] files = Directory.GetFiles(path, "*.csv", SearchOption.AllDirectories);
+
+                // NEW FODLER CREATION FOR HOLDING TEST DATA
+                DateTime currentDate = DateTime.Today;
+                var fileDate = currentDate.ToString();
+
+                string pathToNewFolder = System.IO.Path.Combine(path, $"Formatted Data {fileDate}");
+                DirectoryInfo directory = Directory.CreateDirectory(pathToNewFolder);
+                // Will create if does not already exist (otherwise will ignore)
+
+                // COPYING FILES FROM PARENT TO FORMATTED DATA DATE FOLDER
+                string sourcePath = parent;
+                string targetPath = pathToNewFolder;
+                string fileName = string.Empty;
+                string destFile = string.Empty;
+
+                // To copy all the files in one directory to another directory. 
+                // Get the files in the source folder. (To recursively iterate through 
+                // all subfolders under the current directory, see 
+                // "How to: Iterate Through a Directory Tree.")
+                // Note: Check for target path was performed previously 
+                //       in this code example. 
+                if (System.IO.Directory.Exists(sourcePath))
+                {
+                    string[] copyFiles = System.IO.Directory.GetFiles(sourcePath);
+
+                    // Copy the files and overwrite destination files if they already exist. 
+                    foreach (string s in copyFiles)
+                    {
+                        // Use static Path methods to extract only the file name from the path.
+                        fileName = System.IO.Path.GetFileName(s);
+                        destFile = System.IO.Path.Combine(targetPath, fileName);
+                        System.IO.File.Copy(s, destFile, true);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Source path does not exist!");
+                }
+
+                /*
+                // THIS LOOP SHOULD COUNT THE AMOUNT OF LINES, ASSIGN IT TO LINESKIPARRAY PER T, THEN RESET LINESKIP TO 0 FOR THE NEXT FILE
+                foreach (string s in files)
+                {
+                    bool tf;
+                    string[] lineArray = File.ReadAllLines(s);
+                    int arrayNum = 0;
+                    int t = 0;
+
+                    // MAIN LOOP FOR CALCULATING LINESKIP
+                    do
+                    {
+                        tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)");
+                        lineSkip++;
+                        t++;
+                    } while (tf == false);
+
+                    // INCREMENTING LINESKIP BY -1 TO SET IT UP CORRECTLY
+                    lineSkip = lineSkip - 1;
+                    lineSkipArray[arrayNum] = lineSkip;
+
+                    // TESTING MESSAGE BOX
+                    //MessageBox.Show(lineSkipArray[arrayNum].ToString(), "Notification");
+
+                    // RESET LINESKIP TO 0 FOR EACH FILE IN FILES (AN ARRAY OF STRINGS INCLUDING THE NAME OF EACH FILE IN PARENT)
+                    lineSkip = 0;
+                    arrayNum++;
+                }
+
+                foreach (string s in files)
+                {
+                    //int[] lineSkipNum = new int[99];
+
+                    // EXTRACTING DATA FROM FILES
+                    string fileName = Path.GetFileName(s);
+                    string date_default = "N/A";
+                    var date_input = "N/A";
+                    //var firm_A_default = "N/A";
+                    var firm_A_input = "N/A";
+                    //var firm_B_default = "N/A";
+                    var firm_B_input = "N/A";
+                    //var firm_C_default = "N/A";
+                    var firm_C_input = "N/A";
+
+                    // GRABBING DATE DATA FROM THE FILE
+                    var line1 = File.ReadLines(s).First();
+                    string[] line_number = File.ReadAllLines(s);
+                    string fileCreationTime = File.GetCreationTime(s).ToString();
+
+                    // INCREMENTS AT 1 NOT 0 ?????
+                    // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
+                    if (String.Equals(line1.Substring(0, 10), "Time (sec)"))
+                    {
+                        date_input = date_default;
+                    }
+                    else
+                    {
+                        line1 = line1.Replace("GUI Compile Date: ", "");
+                        DateTime date = DateTime.Parse(line1);
+                        date_input = date.ToString();
+                    }
+
+                    // MAKE IT SO METADATA IS NOT APPENDED TO HEADER LINES
+                    var csv = File.ReadLines(s) // not AllLines
+                    .Select((line, index) => index == lineSkipArray[lineSkipNum]
+                        // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
+                        ? line + "File_Name" + ",File_Creation_Date" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
+                        : line + fileName + "," + fileCreationTime + "," + date_input + "," + firm_A_input + ","
+                               + firm_B_input + "," + firm_C_input + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
+                    .ToList(); // we should write into the same file, that´s why we materialize
+
+                    // EDITING FUNCTION LOCATION GOES HERE, FIX THIS SOON FOR UPCOMING TESTING
+                    File.WriteAllLines(s, csv);
+
+                    // CAN COMMENT THIS LINE BELOW OUT IF NEED BE
+                    //lineSkip = 0;
+                    lineSkipNum++;
+                }
+
+                // NOTIFICATION ALLOWING USER TO SEE IF SOMETHING WAS DONE WITHOUT THE PROGRAM BREAKING
+                MessageBox.Show("Data Formatting Complete!", "Notification");
+
+                // FILE COMBINATION CODE
+                string sourceFolder = parent;
+                string destinationFile = child + "\\" + newFileName + ".csv";
+
+                // Specify wildcard search to match CSV files that will be combined
+                string[] filePaths = Directory.GetFiles(sourceFolder);
+                StreamWriter fileDest = new StreamWriter(destinationFile, true);
+                //int lineSkipHeader = 0;
+                //lineSkipArray[0] = lineSkipHeader;
+                int i;
+                for (i = 0; i < filePaths.Length; i++)
+                {
+                    string file = filePaths[i];
+                    string[] lines = File.ReadAllLines(file);
+
+                    // REMOVES METADATA LINES POST PROCESS FOR FIRST FILE
+                    if (i == 0)
+                    {
+                        // STANDARD
+                        lines = lines.Skip(lineSkipArray[i]).ToArray(); // Skip header row for first file
+                    }
+
+                    // REMOVES METADATA LINES AND HEADER DATA POST PROCESS FOR ALL FILES EXCLUDING THE FIRST
+                    if (i > 0)
+                    {
+                        // STANDARD
+                        lines = lines.Skip(lineSkipArray[i] + 1).ToArray(); // Skip header row for all but first file
+                    }
+
+                    foreach (string line in lines)
+                    {
+                        fileDest.WriteLine(line);
+                    }
+                }
+                fileDest.Close();
+
+                MessageBox.Show("Files have been combined!", "Notification");
+                */
             }
         }
 
