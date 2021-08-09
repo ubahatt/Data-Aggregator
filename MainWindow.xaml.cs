@@ -138,7 +138,7 @@ namespace DataPipeline
                 var fileDate = currentDate.ToString();
                 fileDate = fileDate.Replace("/", "-");
                 fileDate = fileDate.Replace(":", "-");
-                fileDate = fileDate.Replace(" ", "_");
+                //fileDate = fileDate.Replace(" ", "_");
                 
                 //MessageBox.Show(fileDate, "Notification");
                 // Specify a name for your top-level folder.
