@@ -138,9 +138,7 @@ namespace DataPipeline
                 var fileDate = currentDate.ToString();
                 fileDate = fileDate.Replace("/", "-");
                 fileDate = fileDate.Replace(":", "-");
-                //fileDate = fileDate.Replace(" ", "_");
-                
-                //MessageBox.Show(fileDate, "Notification");
+
                 // Specify a name for your top-level folder.
                 string folderName = @parent;
 
@@ -236,7 +234,7 @@ namespace DataPipeline
                     string[] line_number = File.ReadAllLines(s);
                     string fileCreationTime = File.GetCreationTime(s).ToString();
 
-                    // INCREMENTS AT 1 NOT 0 ?????
+                    // WEIRDLY THIS BEGINS AT 1 AND NOT 0
                     // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
                     if (String.Equals(line1.Substring(0, 10), "Time (sec)"))
                     {
