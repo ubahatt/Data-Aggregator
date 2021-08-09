@@ -134,23 +134,20 @@ namespace DataPipeline
                 CultureInfo provider = CultureInfo.InvariantCulture;
 
                 // NEW FODLER CREATION FOR HOLDING TEST DATA
-                DateTime currentDate = DateTime.Today;
+                DateTime currentDate = DateTime.Now;
                 var fileDate = currentDate.ToString();
-
+                fileDate = fileDate.Replace("/", "-");
+                fileDate = fileDate.Replace(":", "-");
+                fileDate = fileDate.Replace(" ", "_");
+                
+                //MessageBox.Show(fileDate, "Notification");
                 // Specify a name for your top-level folder.
                 string folderName = @parent;
 
                 // To create a string that specifies the path to a subfolder under your
                 // top-level folder, add a name for the subfolder to folderName.
-                var pathString = System.IO.Path.Combine(folderName, $"Edited Data {currentDate}");
-
-                // You can extend the depth of your path if you want to.
-                //pathString = System.IO.Path.Combine(pathString, "SubSubFolder");
-                //MessageBox.Show(pathString, "Notification");
-                var newPath = pathString.Replace("/", "-");
-                newPath = newPath.Replace(" ", "_");
-                newPath = newPath.Replace("_12:00:00_AM", "");
-                //MessageBox.Show(newPath, "Notification");
+                var pathString = System.IO.Path.Combine(folderName, $"Edited Data {fileDate}");
+                var newPath = pathString;
 
                 // Create the subfolder. You can verify in File Explorer that you have this
                 // structure in the C: drive.
