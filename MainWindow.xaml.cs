@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.VisualBasic;
 
 namespace DataPipeline
 {
@@ -429,21 +430,37 @@ namespace DataPipeline
                 string path = parent;
                 int[] lineSkipArray = new int[99];
                 CultureInfo provider = CultureInfo.InvariantCulture;
-                string[] files = Directory.GetFiles(path, "*.csv", SearchOption.AllDirectories);
 
                 // NEW FODLER CREATION FOR HOLDING TEST DATA
                 DateTime currentDate = DateTime.Today;
                 var fileDate = currentDate.ToString();
 
-                string pathToNewFolder = System.IO.Path.Combine(path, $"Formatted Data {fileDate}");
-                MessageBox.Show(pathToNewFolder, "Notification");
-                DirectoryInfo directory = Directory.CreateDirectory(pathToNewFolder);
-                // Will create if does not already exist (otherwise will ignore)
+                // Specify a name for your top-level folder.
+                string folderName = @parent;
+
+                // To create a string that specifies the path to a subfolder under your
+                // top-level folder, add a name for the subfolder to folderName.
+                var pathString = System.IO.Path.Combine(folderName, $"Edited Data {currentDate}");
+
+                // You can extend the depth of your path if you want to.
+                //pathString = System.IO.Path.Combine(pathString, "SubSubFolder");
+                //MessageBox.Show(pathString, "Notification");
+                var newPath = pathString.Replace("/", "-");
+                newPath = newPath.Replace(" ", "_");
+                newPath = newPath.Replace("_12:00:00_AM", "");
+                //MessageBox.Show(newPath, "Notification");
+
+                // Create the subfolder. You can verify in File Explorer that you have this
+                // structure in the C: drive.
+                //    Local Disk (C:)
+                //        Top-Level Folder
+                //            SubFolder
+                System.IO.Directory.CreateDirectory(newPath);
 
                 // COPYING FILES FROM PARENT TO FORMATTED DATA DATE FOLDER
                 string sourcePath = parent;
-                string targetPath = pathToNewFolder;
-                string fileName = string.Empty;
+                string targetPath = newPath;
+                string copyFileName = string.Empty;
                 string destFile = string.Empty;
 
                 // To copy all the files in one directory to another directory. 
@@ -460,8 +477,8 @@ namespace DataPipeline
                     foreach (string s in copyFiles)
                     {
                         // Use static Path methods to extract only the file name from the path.
-                        fileName = System.IO.Path.GetFileName(s);
-                        destFile = System.IO.Path.Combine(targetPath, fileName);
+                        copyFileName = System.IO.Path.GetFileName(s);
+                        destFile = System.IO.Path.Combine(targetPath, copyFileName);
                         System.IO.File.Copy(s, destFile, true);
                     }
                 }
@@ -470,7 +487,8 @@ namespace DataPipeline
                     Console.WriteLine("Source path does not exist!");
                 }
 
-                /*
+                string[] files = Directory.GetFiles(newPath, "*.csv", SearchOption.AllDirectories);
+
                 // THIS LOOP SHOULD COUNT THE AMOUNT OF LINES, ASSIGN IT TO LINESKIPARRAY PER T, THEN RESET LINESKIP TO 0 FOR THE NEXT FILE
                 foreach (string s in files)
                 {
@@ -553,8 +571,8 @@ namespace DataPipeline
                 MessageBox.Show("Data Formatting Complete!", "Notification");
 
                 // FILE COMBINATION CODE
-                string sourceFolder = parent;
-                string destinationFile = child + "\\" + newFileName + ".csv";
+                string sourceFolder = newPath;
+                string destinationFile = newPath + "\\" + newFileName + ".csv";
 
                 // Specify wildcard search to match CSV files that will be combined
                 string[] filePaths = Directory.GetFiles(sourceFolder);
@@ -589,7 +607,6 @@ namespace DataPipeline
                 fileDest.Close();
 
                 MessageBox.Show("Files have been combined!", "Notification");
-                */
             }
         }
 
