@@ -106,7 +106,7 @@ namespace DataPipeline
             }
             else
             {
-                // More variables for use within format function 
+                // More variables for use within format function
                 int lineSkipNum = 0;
                 string path = parent;
                 int[] lineSkipArray = new int[99];
@@ -172,8 +172,8 @@ namespace DataPipeline
 
                     // Iterate through the csv's lines parsing for "Time (sec)" as that is what data always begins with, and count lines by incrementing lineskip for each
                     // false output.
-                    // 
-                    // In the future maybe change "Time (sec)" to just "Time" as some copies of test software vary in their naming scheme for time, essentially make uniform and 
+                    //
+                    // In the future maybe change "Time (sec)" to just "Time" as some copies of test software vary in their naming scheme for time, essentially make uniform and
                     // more broad in scope
                     do
                     {
