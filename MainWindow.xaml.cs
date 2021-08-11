@@ -14,44 +14,23 @@ using System.Windows.Controls;
 
 namespace DataPipeline
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    ///
-    /// Multitude of commands used to interact with the Data Transfer Tool.
-    /// </summary>
-
-    //                                                  |>>>
-    //                                                  |
-    //                                               _ _|_ _
-    //                                             |;|_|;|_|;|
-    //                                             \\.    .  /
-    //                                              \\:  .  /
-    //                                               ||:   |
-    //                                               ||:.  |
-    //                                               ||:  .|
-    //                                               ||:   |       \,/
-    //                                               ||: , |            /`\
-    //                                               ||:   |
-    //                                               ||: . |
-    //                __                            _||_   |
-    //       ____--`~    '--~~__            __ ----~    ~`---,              ___
-    //  -~--~                   ~---__ ,--~'                  ~~----_____-~'   `~----~~
-
     public partial class MainWindow : Window
     {
+        // Variable for use within the majority of the tool
         private string parent = "D:\\Testfolder";
+
         private string child = "D:\\Testfolder2";
         private ObservableCollection<MyModel> lt = new ObservableCollection<MyModel>();
         private MyModel myModel;
 
-        // THIS JUST MAKES THE WINDOW EXIST, IT'S PRETTY RAD NGL
+        // Instantiating the window for the app to run in
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        // OPEN PARENT FOLDER USES THIS
-        // CHOOSES A FILE TO OPEN AND SEE FILES WITHIN THAT ONE
+        // Function responsible for selecting a parent folder
+        // User clicks the button opening a file explorer. Uses then selects a folder from the ones available which is then designated as "parent" from now on
         private void Button_Open_ParentFolder(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog openFileDlg = new System.Windows.Forms.FolderBrowserDialog();
@@ -63,8 +42,7 @@ namespace DataPipeline
             parent = txtPath.Text;
         }
 
-        // DISPLAYS FOLDER CONTENTS ON THE TEXTBOX RIGHTSIDE OF SCREEN
-        // YOU CAN SPECIFY FILE TYPE, SEE COMMENT BLOCK BELOW
+        // Function responsible for displaying the contents of parent folder on the textbox on the right side of the window
         private void Button_DisplayFolderContent(object sender, RoutedEventArgs e)
         {
             if (parent == "D:\\Testfolder")
@@ -105,45 +83,47 @@ namespace DataPipeline
             }
         }
 
-        // IM NOT SURE WHAT THIS FUNCTION IS DOING, BUT THE APP DOES NOT RUN WITHOUT IT
+        // Currently don't know what this does, only that the function does not run without it
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
         }
 
-        // THIS ONE WORKS :) HELL YEAH BROTHER
+        // Function responsible for handling anything related to moving and formatting data
+        // Currently the structure of this function is as follows: Create a new folder within parent named "Edited Data {current date and time}", copy data from
+        // parent into said folder, edit data by adding metadata, combine all data into master folder which is named by the user
         private void Button_Format_Better_2(object sender, RoutedEventArgs e)
         {
-            // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
+            // Variables for use within format function
+            int lineSkip = 0;
             var newFileName = "";
             newFileName = fileNameTextBox.Text;
-            int lineSkip = 0;
 
-            // MAIN LOOP FOR THE FUNCTION
-            // THROWS USERS A MESSAGE INCASE CERTAIN FIELDS ARE MISSING IN WINDOW
+            // Main loop for the function
+            // If else below handles if all fields are currently not present/filled out in the app
             if (parent == "D:\\Testfolder" || newFileName == "")
             {
                 MessageBox.Show("Please select a Parent Folder AND enter a name for your master file prior to formatting data.", "Notification");
             }
-            // MAIN LOOP ITSELF
             else
             {
-                // VARIABLES - ASSIGN FILE PATH FROM INPUT BASED ON PRIOR FUNCTIONS
+                // More variables for use within format function 
                 int lineSkipNum = 0;
                 string path = parent;
                 int[] lineSkipArray = new int[99];
                 CultureInfo provider = CultureInfo.InvariantCulture;
 
-                // NEW FODLER CREATION FOR HOLDING TEST DATA
+                //// Chunk below handles creating the new folder and naming it accordingly within parent then transferring parent files into the folder
+                // Date grabbing for folder name
                 DateTime currentDate = DateTime.Now;
                 var fileDate = currentDate.ToString();
                 fileDate = fileDate.Replace("/", "-");
                 fileDate = fileDate.Replace(":", "-");
 
-                // Specify a name for your top-level folder.
+                // Assigning a destination for our new folder, but in our current case we assign parent as we want it to appear there but theoretically we can change it accordingly
+                // or even allow for user input in the future
                 string folderName = @parent;
 
-                // To create a string that specifies the path to a subfolder under your
-                // top-level folder, add a name for the subfolder to folderName.
+                // Creating a string with both the new filename and it's date data and then appending it to the file path that we want it to be under
                 var pathString = System.IO.Path.Combine(folderName, $"Edited Data {fileDate}");
                 var newPath = pathString;
 
@@ -154,18 +134,13 @@ namespace DataPipeline
                 //            SubFolder
                 System.IO.Directory.CreateDirectory(newPath);
 
-                // COPYING FILES FROM PARENT TO FORMATTED DATA DATE FOLDER
+                // Copying data from aprent into newly created folder
                 string sourcePath = parent;
                 string targetPath = newPath;
                 string copyFileName = string.Empty;
                 string destFile = string.Empty;
 
-                // To copy all the files in one directory to another directory.
-                // Get the files in the source folder. (To recursively iterate through
-                // all subfolders under the current directory, see
-                // "How to: Iterate Through a Directory Tree.")
-                // Note: Check for target path was performed previously
-                //       in this code example.
+                // Recursively copy files from parent into the new folder
                 if (System.IO.Directory.Exists(sourcePath))
                 {
                     string[] copyFiles = System.IO.Directory.GetFiles(sourcePath);
@@ -186,7 +161,8 @@ namespace DataPipeline
 
                 string[] files = Directory.GetFiles(newPath, "*.csv", SearchOption.AllDirectories);
 
-                // THIS LOOP SHOULD COUNT THE AMOUNT OF LINES, ASSIGN IT TO LINESKIPARRAY PER T, THEN RESET LINESKIP TO 0 FOR THE NEXT FILE
+                // This loop counts the amount of lines of metadata present in every file, assigning that number to an array containging all the data for every file
+                // current we instantiate lineArray as having 99 cells, but in the future we can do more such that it becomes relevant
                 foreach (string s in files)
                 {
                     bool tf;
@@ -194,7 +170,11 @@ namespace DataPipeline
                     int arrayNum = 0;
                     int t = 0;
 
-                    // MAIN LOOP FOR CALCULATING LINESKIP
+                    // Iterate through the csv's lines parsing for "Time (sec)" as that is what data always begins with, and count lines by incrementing lineskip for each
+                    // false output.
+                    // 
+                    // In the future maybe change "Time (sec)" to just "Time" as some copies of test software vary in their naming scheme for time, essentially make uniform and 
+                    // more broad in scope
                     do
                     {
                         tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)");
@@ -202,14 +182,14 @@ namespace DataPipeline
                         t++;
                     } while (tf == false);
 
-                    // INCREMENTING LINESKIP BY -1 TO SET IT UP CORRECTLY
+                    // We need to subtract 1 from lineSkip to ensure things work correctly, then assign lineskip to it's relevant lineArray entry to ensure we can use it later in data formatting.
                     lineSkip = lineSkip - 1;
                     lineSkipArray[arrayNum] = lineSkip;
 
                     // TESTING MESSAGE BOX
                     //MessageBox.Show(lineSkipArray[arrayNum].ToString(), "Notification");
 
-                    // RESET LINESKIP TO 0 FOR EACH FILE IN FILES (AN ARRAY OF STRINGS INCLUDING THE NAME OF EACH FILE IN PARENT)
+                    // Rreset lineSkip to 0 before going back in the loop such that we get correct data for every file present
                     lineSkip = 0;
                     arrayNum++;
                 }
@@ -218,7 +198,8 @@ namespace DataPipeline
                 {
                     //int[] lineSkipNum = new int[99];
 
-                    // EXTRACTING DATA FROM FILES
+                    // Variables for use within data assignment for header data
+                    // Certain variables are commented out as they aren't needed or used at the moment
                     string fileName = Path.GetFileName(s);
                     string date_default = "N/A";
                     var date_input = "N/A";
@@ -229,13 +210,14 @@ namespace DataPipeline
                     //var firm_C_default = "N/A";
                     var firm_C_input = "N/A";
 
-                    // GRABBING DATE DATA FROM THE FILE
+                    //// Grabbing the metadata from the file below
                     var line1 = File.ReadLines(s).First();
                     string[] line_number = File.ReadAllLines(s);
                     string fileCreationTime = File.GetCreationTime(s).ToString();
 
-                    // WEIRDLY THIS BEGINS AT 1 AND NOT 0
-                    // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
+                    // Handles if GUI Compile date exists or not, can probably rework this as all data is different format wise
+                    //
+                    // Weirdly this begins at 1 and not 0? Anyways just extended Substring(0, 9) to (0, 10)
                     if (String.Equals(line1.Substring(0, 10), "Time (sec)"))
                     {
                         date_input = date_default;
@@ -247,52 +229,49 @@ namespace DataPipeline
                         date_input = date.ToString();
                     }
 
-                    // MAKE IT SO METADATA IS NOT APPENDED TO HEADER LINES
-                    var csv = File.ReadLines(s) // not AllLines
+                    var csv = File.ReadLines(s)
                     .Select((line, index) => index == lineSkipArray[lineSkipNum]
-                        // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
+                        // Order can be changed by subbing out the data labels below and by changing the variable name below that
                         ? line + "File_Name" + ",File_Creation_Date" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
                         : line + fileName + "," + fileCreationTime + "," + date_input + "," + firm_A_input + ","
-                               + firm_B_input + "," + firm_C_input + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
+                               + firm_B_input + "," + firm_C_input + ",")
                     .ToList(); // we should write into the same file, that´s why we materialize
 
-                    // EDITING FUNCTION LOCATION GOES HERE, FIX THIS SOON FOR UPCOMING TESTING
+                    // Write all lines to csv such that it reflects the newly edited data
                     File.WriteAllLines(s, csv);
 
-                    // CAN COMMENT THIS LINE BELOW OUT IF NEED BE
-                    //lineSkip = 0;
+                    // Increment lineSkipNum in order to make sure that each file gets it's correct lineSkipArray value
                     lineSkipNum++;
                 }
 
-                // NOTIFICATION ALLOWING USER TO SEE IF SOMETHING WAS DONE WITHOUT THE PROGRAM BREAKING
+                // Notification showing that program has completed the data formatting portion
                 MessageBox.Show("Data Formatting Complete!", "Notification");
 
-                // FILE COMBINATION CODE
+                //// Chunk below handles combining data into a master
                 string sourceFolder = newPath;
                 string destinationFile = newPath + "\\" + newFileName + ".csv";
 
                 // Specify wildcard search to match CSV files that will be combined
+                //
+                // Creating some more variables for use in this chunk
                 string[] filePaths = Directory.GetFiles(sourceFolder);
                 StreamWriter fileDest = new StreamWriter(destinationFile, true);
-                //int lineSkipHeader = 0;
-                //lineSkipArray[0] = lineSkipHeader;
+
                 int i;
                 for (i = 0; i < filePaths.Length; i++)
                 {
                     string file = filePaths[i];
                     string[] lines = File.ReadAllLines(file);
 
-                    // REMOVES METADATA LINES POST PROCESS FOR FIRST FILE
+                    // Removing metadata labels for first file
                     if (i == 0)
                     {
-                        // STANDARD
                         lines = lines.Skip(lineSkipArray[i]).ToArray(); // Skip header row for first file
                     }
 
-                    // REMOVES METADATA LINES AND HEADER DATA POST PROCESS FOR ALL FILES EXCLUDING THE FIRST
+                    // Removes metadata lines in all other files except the first
                     if (i > 0)
                     {
-                        // STANDARD
                         lines = lines.Skip(lineSkipArray[i] + 1).ToArray(); // Skip header row for all but first file
                     }
 
@@ -314,12 +293,21 @@ namespace DataPipeline
             var newFileName = "";
             newFileName = fileNameTextBox.Text;
             int lineSkip = 0;
+            int easterEgg = 0;
 
             // MAIN LOOP FOR THE FUNCTION
             // THROWS USERS A MESSAGE INCASE CERTAIN FIELDS ARE MISSING IN WINDOW
             if (parent == "D:\\Testfolder" || newFileName == "")
             {
-                MessageBox.Show("Please select a Parent Folder AND enter a name for your master file prior to formatting data.", "Notification");
+                easterEgg++;
+                if (easterEgg >= 15)
+                {
+                    MessageBox.Show("Come on dude, you've incorrectly used the tool 15 times.", "Notification");
+                }
+                else
+                {
+                    MessageBox.Show("Please select a Parent Folder AND enter a name for your master file prior to formatting data.", "Notification");
+                }
             }
             // MAIN LOOP ITSELF
             else
