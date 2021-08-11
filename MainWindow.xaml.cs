@@ -120,7 +120,7 @@ namespace DataPipeline
 
             // MAIN LOOP FOR THE FUNCTION
             // THROWS USERS A MESSAGE INCASE CERTAIN FIELDS ARE MISSING IN WINDOW
-            if (parent == "D:\\Testfolder" /*|| child == "D:\\Testfolder2"*/ || newFileName == "")
+            if (parent == "D:\\Testfolder" || newFileName == "")
             {
                 MessageBox.Show("Please select a Parent Folder AND enter a name for your master file prior to formatting data.", "Notification");
             }
