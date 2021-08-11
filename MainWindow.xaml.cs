@@ -307,6 +307,203 @@ namespace DataPipeline
             }
         }
 
+        // CREATING A NEW FUNCTION FOR HANDLING MISTMATH OR MAYBE JUST ONE TO HANDLE BOTH?
+        private void Button_Format_Better_3(object sender, RoutedEventArgs e)
+        {
+            // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
+            var newFileName = "";
+            newFileName = fileNameTextBox.Text;
+            int lineSkip = 0;
+
+            // MAIN LOOP FOR THE FUNCTION
+            // THROWS USERS A MESSAGE INCASE CERTAIN FIELDS ARE MISSING IN WINDOW
+            if (parent == "D:\\Testfolder" || newFileName == "")
+            {
+                MessageBox.Show("Please select a Parent Folder AND enter a name for your master file prior to formatting data.", "Notification");
+            }
+            // MAIN LOOP ITSELF
+            else
+            {
+                // VARIABLES - ASSIGN FILE PATH FROM INPUT BASED ON PRIOR FUNCTIONS
+                int lineSkipNum = 0;
+                string path = parent;
+                int[] lineSkipArray = new int[99];
+                CultureInfo provider = CultureInfo.InvariantCulture;
+
+                // NEW FODLER CREATION FOR HOLDING TEST DATA
+                DateTime currentDate = DateTime.Now;
+                var fileDate = currentDate.ToString();
+                fileDate = fileDate.Replace("/", "-");
+                fileDate = fileDate.Replace(":", "-");
+
+                // Specify a name for your top-level folder.
+                string folderName = @parent;
+
+                // To create a string that specifies the path to a subfolder under your
+                // top-level folder, add a name for the subfolder to folderName.
+                var pathString = System.IO.Path.Combine(folderName, $"Edited Data {fileDate}");
+                var newPath = pathString;
+
+                // Create the subfolder. You can verify in File Explorer that you have this
+                // structure in the C: drive.
+                //    Local Disk (C:)
+                //        Top-Level Folder
+                //            SubFolder
+                System.IO.Directory.CreateDirectory(newPath);
+
+                // COPYING FILES FROM PARENT TO FORMATTED DATA DATE FOLDER
+                string sourcePath = parent;
+                string targetPath = newPath;
+                string copyFileName = string.Empty;
+                string destFile = string.Empty;
+
+                // To copy all the files in one directory to another directory.
+                // Get the files in the source folder. (To recursively iterate through
+                // all subfolders under the current directory, see
+                // "How to: Iterate Through a Directory Tree.")
+                // Note: Check for target path was performed previously
+                //       in this code example.
+                if (System.IO.Directory.Exists(sourcePath))
+                {
+                    string[] copyFiles = System.IO.Directory.GetFiles(sourcePath);
+
+                    // Copy the files and overwrite destination files if they already exist.
+                    foreach (string s in copyFiles)
+                    {
+                        // Use static Path methods to extract only the file name from the path.
+                        copyFileName = System.IO.Path.GetFileName(s);
+                        destFile = System.IO.Path.Combine(targetPath, copyFileName);
+                        System.IO.File.Copy(s, destFile, true);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Source path does not exist!");
+                }
+
+                string[] files = Directory.GetFiles(newPath, "*.csv", SearchOption.AllDirectories);
+
+                // THIS LOOP SHOULD COUNT THE AMOUNT OF LINES, ASSIGN IT TO LINESKIPARRAY PER T, THEN RESET LINESKIP TO 0 FOR THE NEXT FILE
+                foreach (string s in files)
+                {
+                    bool tf;
+                    string[] lineArray = File.ReadAllLines(s);
+                    int arrayNum = 0;
+                    int t = 0;
+
+                    // MAIN LOOP FOR CALCULATING LINESKIP
+                    do
+                    {
+                        tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)");
+                        lineSkip++;
+                        t++;
+                    } while (tf == false);
+
+                    // INCREMENTING LINESKIP BY -1 TO SET IT UP CORRECTLY
+                    lineSkip = lineSkip - 1;
+                    lineSkipArray[arrayNum] = lineSkip;
+
+                    // TESTING MESSAGE BOX
+                    //MessageBox.Show(lineSkipArray[arrayNum].ToString(), "Notification");
+
+                    // RESET LINESKIP TO 0 FOR EACH FILE IN FILES (AN ARRAY OF STRINGS INCLUDING THE NAME OF EACH FILE IN PARENT)
+                    lineSkip = 0;
+                    arrayNum++;
+                }
+
+                foreach (string s in files)
+                {
+                    //int[] lineSkipNum = new int[99];
+
+                    // EXTRACTING DATA FROM FILES
+                    string fileName = Path.GetFileName(s);
+                    string date_default = "N/A";
+                    var date_input = "N/A";
+                    //var firm_A_default = "N/A";
+                    var firm_A_input = "N/A";
+                    //var firm_B_default = "N/A";
+                    var firm_B_input = "N/A";
+                    //var firm_C_default = "N/A";
+                    var firm_C_input = "N/A";
+
+                    // GRABBING DATE DATA FROM THE FILE
+                    var line1 = File.ReadLines(s).First();
+                    string[] line_number = File.ReadAllLines(s);
+                    string fileCreationTime = File.GetCreationTime(s).ToString();
+
+                    // WEIRDLY THIS BEGINS AT 1 AND NOT 0
+                    // HANDLES IF COMPILE DATE ACTUALLY EXISTS OR NOT
+                    if (String.Equals(line1.Substring(0, 10), "Time (sec)"))
+                    {
+                        date_input = date_default;
+                    }
+                    else
+                    {
+                        line1 = line1.Replace("GUI Compile Date: ", "");
+                        DateTime date = DateTime.Parse(line1);
+                        date_input = date.ToString();
+                    }
+
+                    // MAKE IT SO METADATA IS NOT APPENDED TO HEADER LINES
+                    var csv = File.ReadLines(s) // not AllLines
+                    .Select((line, index) => index == lineSkipArray[lineSkipNum]
+                        // ONCE ALL METADATA IS IMPLEMENTED ORDER WITHIN THE CSV CAN BE CHANGED BY CHANGING THE ORDER IN WHICH THEY APPEAR BELOW
+                        ? line + "File_Name" + ",File_Creation_Date" + ",GUI_Compile_Date" + ",Firmware_Header_A" + ",Firmware_Header_B" + ",Firmware_Header_C" + ","
+                        : line + fileName + "," + fileCreationTime + "," + date_input + "," + firm_A_input + ","
+                               + firm_B_input + "," + firm_C_input + ",") // REMOVE BLOCK COMMENT ONCE METADATA IS SECURED
+                    .ToList(); // we should write into the same file, that´s why we materialize
+
+                    // EDITING FUNCTION LOCATION GOES HERE, FIX THIS SOON FOR UPCOMING TESTING
+                    File.WriteAllLines(s, csv);
+
+                    // CAN COMMENT THIS LINE BELOW OUT IF NEED BE
+                    //lineSkip = 0;
+                    lineSkipNum++;
+                }
+
+                // NOTIFICATION ALLOWING USER TO SEE IF SOMETHING WAS DONE WITHOUT THE PROGRAM BREAKING
+                MessageBox.Show("Data Formatting Complete!", "Notification");
+
+                // FILE COMBINATION CODE
+                string sourceFolder = newPath;
+                string destinationFile = newPath + "\\" + newFileName + ".csv";
+
+                // Specify wildcard search to match CSV files that will be combined
+                string[] filePaths = Directory.GetFiles(sourceFolder);
+                StreamWriter fileDest = new StreamWriter(destinationFile, true);
+                //int lineSkipHeader = 0;
+                //lineSkipArray[0] = lineSkipHeader;
+                int i;
+                for (i = 0; i < filePaths.Length; i++)
+                {
+                    string file = filePaths[i];
+                    string[] lines = File.ReadAllLines(file);
+
+                    // REMOVES METADATA LINES POST PROCESS FOR FIRST FILE
+                    if (i == 0)
+                    {
+                        // STANDARD
+                        lines = lines.Skip(lineSkipArray[i]).ToArray(); // Skip header row for first file
+                    }
+
+                    // REMOVES METADATA LINES AND HEADER DATA POST PROCESS FOR ALL FILES EXCLUDING THE FIRST
+                    if (i > 0)
+                    {
+                        // STANDARD
+                        lines = lines.Skip(lineSkipArray[i] + 1).ToArray(); // Skip header row for all but first file
+                    }
+
+                    foreach (string line in lines)
+                    {
+                        fileDest.WriteLine(line);
+                    }
+                }
+                fileDest.Close();
+
+                MessageBox.Show("Files have been combined!", "Notification");
+            }
+        }
+
         //
         //
         //
