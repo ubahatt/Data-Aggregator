@@ -307,7 +307,7 @@ namespace DataPipeline
             }
         }
 
-        // CREATING A NEW FUNCTION FOR HANDLING MISTMATH OR MAYBE JUST ONE TO HANDLE BOTH?
+        // CREATING A NEW FUNCTION FOR HANDLING MISTMATCH OR MAYBE JUST ONE TO HANDLE BOTH?
         private void Button_Format_Better_3(object sender, RoutedEventArgs e)
         {
             // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
