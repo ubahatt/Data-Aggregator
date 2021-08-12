@@ -17,11 +17,11 @@ namespace DataPipeline
     public partial class MainWindow : Window
     {
         // Variable for use within the majority of the tool
-        private string parent = "D:\\Testfolder";
+        private MyModel myModel;
 
+        private string parent = "D:\\Testfolder";
         private string child = "D:\\Testfolder2";
         private ObservableCollection<MyModel> lt = new ObservableCollection<MyModel>();
-        private MyModel myModel;
 
         // Instantiating the window for the app to run in
         public MainWindow()
@@ -891,50 +891,6 @@ namespace DataPipeline
 
             MessageBox.Show("Files Combined!", "Notification");
         }
-
-        /*
-     // DEPRECATED
-     // DELETE THIS IN THE FUTURE
-     private void Save_Click(object sender, RoutedEventArgs e)
-     {
-         List<string> ltForSave = new List<string>();
-         foreach (MyModel obj in myList.ItemsSource)
-         {
-             if (obj.StatusForCheckBox == false)
-             {
-                 ltForSave.Add(";" + obj.Name);
-             }
-             else
-             {
-                 ltForSave.Add(obj.Name);
-             }
-         }
-         //Save ltForSave for ini file.
-     }
-
-     // DEPRECATED
-     // DELETE LATER
-     private void Button_Click_1(object sender, RoutedEventArgs e)
-     {
-         // Create OpenFileDialog
-         Microsoft.Win32.OpenFileDialog Search = new Microsoft.Win32.OpenFileDialog();
-
-         // Set filter for file extension and default file extension
-         Search.DefaultExt = ".ini";
-         Search.Filter = "File ini (*.ini)|*.ini";
-
-         // Display OpenFileDialog by calling ShowDialog method
-         Nullable<bool> result = Search.ShowDialog();
-
-         // Get the selected file name and display in a TextBox
-         if (result == true)
-         {
-             // Open document
-             string filename = Search.FileName;
-             file_receiver.Text = filename;
-         }
-     }
-     */
     }
 
     public class MyModel
