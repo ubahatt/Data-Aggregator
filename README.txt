@@ -18,6 +18,9 @@ USAGE
 4. After selecting a Parent Folder, you can click the "Display Folder Contents" button to view the files present within the designated Parent Folder.
 5. Enter a name for your master file in the textbox under "Enter Name for Master File".
 6. Click the "Format and Combine Data" button, and upon formatting success and data combination success you will receive a unique message for each portion.
+-> After clicking the format and combine button, a new folder will be generated within the parent folder with the current date and time present in the filename,
+   The files from parent folder will be copied into the new folder, to which they will then be edited to reflect their metadata, then they will be combined and made into a new
+   csv file named after the user inputted master file name.
 
 CHANGELOG
 7/23/2021 - Release of beta version for testing.
