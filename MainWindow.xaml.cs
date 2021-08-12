@@ -503,8 +503,6 @@ namespace DataPipeline
         //
         //
 
-        // FORMATTING FUNCTION
-        // TAKES IN FILES FROM PARENT FOLDER, FORMATS THEM ACCORDINGLY WITH METADATA, THEN DUMPS INTO ONE MASTER FILE INTO CHILD FOLDER
         private void Button_FormatAndTransfer(object sender, RoutedEventArgs e)
         {
             /*
