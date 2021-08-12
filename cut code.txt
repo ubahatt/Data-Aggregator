@@ -60,3 +60,18 @@
          }
      }
      */
+
+        // SELECT FILE PATH USES THIS
+        // CHOOSES A CHILD FOLDER SUCH THAT WE CAN TEST THE TRANSFER OF FILES FROM ONE FOLDER TO THE OTHER
+        /*
+        private void Button_Click_ChildFolder(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog openFileDlg = new System.Windows.Forms.FolderBrowserDialog();
+            var result = openFileDlg.ShowDialog();
+            if (result.ToString() != string.Empty)
+            {
+                file_receiver.Text = openFileDlg.SelectedPath;
+            }
+            child = file_receiver.Text;
+        }
+        */
