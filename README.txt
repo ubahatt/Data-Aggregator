@@ -1,4 +1,4 @@
-NPI DATA PIPELINE VERSION 1
+NPI DATA PIPELINE VERSION 1.5
 
 README 
 This file contains instructions on how to operate the current version of the NPI Data Pipeline Tool.
@@ -12,13 +12,12 @@ PREREQUISITES
 3. Now you're ready to use the tool :) !
 
 USAGE
-1. Ensure that your original data is stored in a holding cell prior to usage of the tool. THIS STEP IS VERY IMPORTANT AS IT ENSURES THE INTEGRITY AND PURITY OF ORIGINAL DATA!!!
-2. Open the tool through the Data_Pipeline.exe.
-3. Designate a Parent Folder - Folder that the data from the holding cell is copied into.
-4. Click "Display Folder Contents" button - This button will display the contents of the Parent Folder on the box to the right side of the screen. Use this to confirm you have selected the correct folder.
-5. Enter a filename for the master file you are creating - file containing the edited data you wish to combine.
-8. After ensuring all fields are filled out - Parent Folder and Master File Name - Click the format data button. This will format data and then combine it into a master file containing the data from the Parent Folder. The file will be placed into a new folder that is created named "Edited Data {Today's Date}".
-9. Let me know if anything breaks :) .
+1. Ensure that you have a copy of your data saved elsewhere apart from the folder you plan on designating as the "Parent Folder".
+2. Open the tool.
+3. Designate a parent folder using the "Open Parent Folder" button and selecting a folder present within the file browser pop-up.
+4. After selecting a Parent Folder, you can click the "Display Folder Contents" button to view the files present within the designated Parent Folder.
+5. Enter a name for your master file in the textbox under "Enter Name for Master File".
+6. Click the "Format and Combine Data" button, and upon formatting success and data combination success you will receive a unique message for each portion.
 
 CHANGELOG
 7/23/2021 - Release of beta version for testing.
