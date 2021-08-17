@@ -5,13 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.OleDb;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Data.OleDb;
 
 namespace DataPipeline
 {
@@ -885,6 +885,7 @@ namespace DataPipeline
     }
 
     // CLASS HANDLING MISMSATCHED STUFF, NEED TO MESH THIS STUFF IN
+    /*
     public static class CSVHelpers
     {
         public static void CombineCsvFiles(string sourceFolder, string destinationFile, string searchPattern = "*.csv", bool isMismatched = false)
@@ -1001,10 +1002,11 @@ namespace DataPipeline
         }
     }
 
-    class Program
+    internal class Program
     {
-        const string FOLDER = @"c:\temp\test";
-        static void Main(string[] args)
+        private const string FOLDER = @"c:\temp\test";
+
+        private static void Main(string[] args)
         {
             CSVReader reader = new CSVReader();
 
@@ -1045,22 +1047,19 @@ namespace DataPipeline
                     }
                 }
             }
-
         }
     }
+
     public class CSVReader
     {
-
         public DataSet ReadCSVFile(string fullPath, bool headerRow)
         {
-
             string path = fullPath.Substring(0, fullPath.LastIndexOf("\\") + 1);
             string filename = fullPath.Substring(fullPath.LastIndexOf("\\") + 1);
             DataSet ds = new DataSet();
 
             try
             {
-
                 //read csv file using OLEDB Net Library
                 if (File.Exists(fullPath))
                 {
@@ -1077,7 +1076,6 @@ namespace DataPipeline
                     col.ColumnName = col.ColumnName.Replace(" ", "_");
                 }
             }
-
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -1085,4 +1083,5 @@ namespace DataPipeline
             return ds;
         }
     }
+    */
 }
