@@ -12,8 +12,8 @@
         <ListBox x:Name="myList" Margin="0,20,10,10" HorizontalAlignment="Right" Width="510" FontSize="12">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Content="{Binding Name}" IsChecked="{Binding StatusForCheckBox,Mode=TwoWay}" />
-                    <!-- <TextBlock Content="{Binding Name}" /> -->
+                    <!--<CheckBox Content="{Binding Name}" IsChecked="{Binding StatusForCheckBox,Mode=TwoWay}" /> -->
+                    <TextBlock Text="{Binding Name}" /> 
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -21,7 +21,7 @@
         <!--Button Content="Select File Path" Height="35
                 " Margin="0,125,525,0" VerticalAlignment="Top" Click="Button_Click_ChildFolder" HorizontalAlignment="Right" Width="144" /-->
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Parent Folder" VerticalAlignment="Top" Margin="21,5,0,0" Width="86" Height="31" />
-        <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Folder Contents to be Transferred" VerticalAlignment="Top" Margin="0,4,234,0" Width="285" Height="16" />
+        <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Folder Contents to be Combined" VerticalAlignment="Top" Margin="0,4,234,0" Width="285" Height="16" />
         <!--TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Child Folder" VerticalAlignment="Top" Margin="21,109,0,0" Height="29" Width="164" /-->
         <Button Content="Format and Combine Data" Margin="0,0,703,23" Click="Button_Format_Better_2" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="250" />
         <TextBlock Margin="21,0,525,155" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="151"><Run Text="Instructions for Use" /><LineBreak /><Run Text="1. Click &quot;Open Parent Folder&quot; and select the folder containing data you wish to Format and Combine." /><LineBreak /><Run Text="2. To confirm you have put files into the selected folder, click &quot;Display Folder Contents&quot; to see the content of the selected folder." /><LineBreak /><Run Text="3. Enter a name for the new file you are creating." /><LineBreak /><Run Text="4. Click &quot;Format and Combine Data&quot; to format selected data. A notification will pop up once finished." /></TextBlock>

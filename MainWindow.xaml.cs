@@ -257,6 +257,9 @@ namespace DataPipeline
                 // Creating some more variables for use in this chunk
                 string[] filePaths = Directory.GetFiles(sourceFolder);
                 StreamWriter fileDest = new StreamWriter(destinationFile, true);
+                
+                // We can use this line below to save the csv to the original folder rather than putting that in the new edited data folder
+                //StreamWriter fileDest = new StreamWriter(parent, true);
 
                 int i;
                 for (i = 0; i < filePaths.Length; i++)
@@ -284,6 +287,8 @@ namespace DataPipeline
                 fileDest.Close();
 
                 MessageBox.Show("Files have been combined!", "Notification");
+
+                
             }
         }
 
