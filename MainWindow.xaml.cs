@@ -249,7 +249,10 @@ namespace DataPipeline
                 MessageBox.Show("Data Formatting Complete!", "Notification");
 
                 //// Chunk below handles combining data into a master
+                // We have a commented chunk at the bottom, this will change the location of the combined master into the new generated folder if uncommented, currently 
+                // it saves that file just to parent.
                 string sourceFolder = newPath;
+                //string destinationFile = parent + "\\" + newFileName + ".csv";
                 string destinationFile = newPath + "\\" + newFileName + ".csv";
 
                 // Specify wildcard search to match CSV files that will be combined
