@@ -304,7 +304,16 @@ namespace DataAggregator
 
                 MessageBox.Show("Files have been combined!", "Notification");
 
-                
+                // File Cleanup
+                // Deletes the "Edited Data {date}" file that gets created
+                string[] fileDelete = Directory.GetFiles(newPath);
+                foreach (string file in fileDelete)
+                {
+                    File.Delete(file);
+                }
+                Directory.Delete(newPath);
+
+                MessageBox.Show("Files have been cleaned up!", "Notification");
             }
         }
 
