@@ -38,9 +38,9 @@ namespace DataAggregator
             var result = openFileDlg.ShowDialog();
             if (result.ToString() != string.Empty)
             {
-                txtPath.Text = openFileDlg.SelectedPath;
+                file_input.Text = openFileDlg.SelectedPath;
             }
-            parent = txtPath.Text;
+            parent = file_input.Text;
         }
 
         // Function responsible for selecting a parent folder
