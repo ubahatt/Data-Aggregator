@@ -191,7 +191,9 @@ namespace DataAggregator
                     // more broad in scope
                     do
                     {
-                        tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)");
+                        // More specific search term, but not all GUIs return us Time (sec), just Time will be more consistent
+                        //tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)"); // More
+                        tf =String.Equals(lineArray[t].Substring(0,4), "Time");
                         lineSkip++;
                         t++;
                     } while (tf == false);
