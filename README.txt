@@ -12,6 +12,8 @@ PREREQUISITES
 3. Now you're ready to use the tool :) !
 
 USAGE
+Pre-use Nots: Make sure that you only have the files you want to combine in the folder, as the tool takes every present csv stored in the parent folder and combines them.
+
 1. Ensure that you have a copy of your data saved elsewhere apart from the folder you plan on designating as the "Parent Folder".
 2. Open the tool.
 3. Designate a parent folder using the "Open Parent Folder" button and selecting a folder present within the file browser pop-up.
