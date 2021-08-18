@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data Pipeline", "Data Pipeline.csproj", "{54207BD8-7873-4BC4-B28E-8BCBFA35998E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data Aggregator", "Data Aggregator.csproj", "{54207BD8-7873-4BC4-B28E-8BCBFA35998E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

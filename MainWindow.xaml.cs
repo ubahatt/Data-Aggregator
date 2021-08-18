@@ -13,7 +13,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace DataPipeline
+namespace DataAggregator
 {
     public partial class MainWindow : Window
     {
