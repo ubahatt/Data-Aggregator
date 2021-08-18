@@ -43,6 +43,19 @@ namespace DataPipeline
             parent = txtPath.Text;
         }
 
+        // Function responsible for selecting a parent folder
+        // User clicks the button opening a file explorer. Uses then selects a folder from the ones available which is then designated as "parent" from now on
+        private void Button_Open_ChildFolder(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog openFileDlg = new System.Windows.Forms.FolderBrowserDialog();
+            var result = openFileDlg.ShowDialog();
+            if (result.ToString() != string.Empty)
+            {
+                file_output.Text = openFileDlg.SelectedPath;
+            }
+            child = file_output.Text;
+        }
+
         // Function responsible for displaying the contents of parent folder on the textbox on the right side of the window
         private void Button_DisplayFolderContent(object sender, RoutedEventArgs e)
         {
@@ -101,7 +114,7 @@ namespace DataPipeline
 
             // Main loop for the function
             // If else below handles if all fields are currently not present/filled out in the app
-            if (parent == "D:\\Testfolder" || newFileName == "")
+            if (parent == "D:\\Testfolder" || child == "D:\\Testfolder" || newFileName == "")
             {
                 MessageBox.Show("Please select a Parent Folder AND enter a name for your master file prior to formatting data.", "Notification");
             }
@@ -252,8 +265,8 @@ namespace DataPipeline
                 // We have a commented chunk at the bottom, this will change the location of the combined master into the new generated folder if uncommented, currently 
                 // it saves that file just to parent.
                 string sourceFolder = newPath;
-                //string destinationFile = parent + "\\" + newFileName + ".csv";
-                string destinationFile = newPath + "\\" + newFileName + ".csv";
+                string destinationFile = child + "\\" + newFileName + ".csv";
+                //string destinationFile = newPath + "\\" + newFileName + ".csv";
 
                 // Specify wildcard search to match CSV files that will be combined
                 //
