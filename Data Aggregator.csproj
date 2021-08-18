@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{54207BD8-7873-4BC4-B28E-8BCBFA35998E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Data_Pipeline</RootNamespace>
-    <AssemblyName>Data_Pipeline</AssemblyName>
+    <RootNamespace>Data_Aggregator</RootNamespace>
+    <AssemblyName>Data_Aggregator</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
