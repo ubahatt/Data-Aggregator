@@ -1,5 +1,4 @@
 ﻿// DATA PIPELINE TOOL @ GENER8
-// UDI BAHATT
 
 using System;
 using System.Collections.ObjectModel;
@@ -14,6 +13,16 @@ namespace DataAggregator
 {
     public partial class MainWindow : Window
     {
+        /// <summary>
+        ///     This code is for the Gener8 NPI Data Aggregation Tool
+        ///
+        ///     The purpose of the tool is to allow NPI Engineers within Gener8 to easily aggregate test data in the form of csv files in a large master file alongside important
+        ///     metadata gathered from the files themselves. Metadata can include things such as the date the file was created, the date the test was performed, or other things 
+        ///     present in the files being combined such as firmware versions of the GUI used for testing or the name/designation of a certain machine the test was performed on. 
+        ///     
+        ///     On the current iteration of this code we are using Button_Format_Better_2, as it is the second version of the Button_Format_Better function.
+        /// </summary>
+
         // Variable for use within the majority of the tool
         private MyModel myModel;
 
