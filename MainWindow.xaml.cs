@@ -2,14 +2,11 @@
 // UDI BAHATT
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Data.OleDb;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -193,7 +190,7 @@ namespace DataAggregator
                     {
                         // More specific search term, but not all GUIs return us Time (sec), just Time will be more consistent
                         //tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)"); // More
-                        tf = String.Equals(lineArray[t].Substring(0,4), "Time");
+                        tf = String.Equals(lineArray[t].Substring(0, 4), "Time");
                         lineSkip++;
                         t++;
                     } while (tf == false);
@@ -264,7 +261,7 @@ namespace DataAggregator
                 MessageBox.Show("Data Formatting Complete!", "Notification");
 
                 //// Chunk below handles combining data into a master
-                // We have a commented chunk at the bottom, this will change the location of the combined master into the new generated folder if uncommented, currently 
+                // We have a commented chunk at the bottom, this will change the location of the combined master into the new generated folder if uncommented, currently
                 // it saves that file just to parent.
                 string sourceFolder = newPath;
                 string destinationFile = child + "\\" + newFileName + ".csv";
@@ -275,7 +272,7 @@ namespace DataAggregator
                 // Creating some more variables for use in this chunk
                 string[] filePaths = Directory.GetFiles(sourceFolder);
                 StreamWriter fileDest = new StreamWriter(destinationFile, true);
-                
+
                 // We can use this line below to save the csv to the original folder rather than putting that in the new edited data folder
                 //StreamWriter fileDest = new StreamWriter(parent, true);
 
