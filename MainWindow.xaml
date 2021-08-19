@@ -13,7 +13,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <!--<CheckBox Content="{Binding Name}" IsChecked="{Binding StatusForCheckBox,Mode=TwoWay}" /> -->
-                    <TextBlock Text="{Binding Name}" /> 
+                    <TextBlock Text="{Binding Name}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -21,7 +21,7 @@
         <Button Content="Select Output Folder" Height="35
                 " Margin="0,125,525,0" VerticalAlignment="Top" Click="Button_Open_ChildFolder" HorizontalAlignment="Right" Width="144" />
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Input Folder" VerticalAlignment="Top" Margin="21,5,0,0" Width="86" Height="15" />
-        <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Folder Contents to be Combined" VerticalAlignment="Top" Margin="0,4,234,0" Width="285" Height="16" />
+        <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Folder Contents to be Combined - ALL FILES PRESENT WITHIN INPUT FOLDER WILL BE USED" VerticalAlignment="Top" Margin="0,4,10,0" Width="509" Height="16" />
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Output Folder" VerticalAlignment="Top" Margin="21,109,0,0" Height="16" Width="164" />
         <Button Content="Format and Combine Data" Margin="0,0,703,23" Click="Button_Format_Better_2" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="250" />
         <TextBlock Margin="21,0,525,155" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="151"><Run Text="Instructions for Use"/><LineBreak/><Run Text="1. Click &quot;Open Input Folder&quot; and select a folder - this folder should already contain only the files you wish to combine."/><LineBreak/><Run Text="2. To confirm you have put files into the selected folder, click &quot;Display Folder Contents&quot; to see the content of the selected folder."/><LineBreak/><Run Text="3. Click &quot;Select Output Folder&quot; to designate an output for the combined file."/><LineBreak/><Run Text="4. Enter a name for the new file you are creating."/><LineBreak/><Run Text="5. Click &quot;Format and Combine Data&quot; to format selected data. A notification will pop up once finished."/></TextBlock>
