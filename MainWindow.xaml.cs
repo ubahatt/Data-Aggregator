@@ -234,7 +234,7 @@ namespace DataAggregator
                     // Handles if GUI Compile date exists or not, can probably rework this as all data is different format wise
                     //
                     // Weirdly this begins at 1 and not 0? Anyways just extended Substring(0, 9) to (0, 10)
-                    if (String.Equals(line1.Substring(0, 10), "Time (sec)"))
+                    if (String.Equals(line1.Substring(0, 4), "Time"))
                     {
                         date_input = date_default;
                     }
