@@ -14,6 +14,8 @@ namespace DataAggregator
     public partial class MainWindow : Window
     {
         /// <summary>
+        ///     Udi Bahatt
+        ///     
         ///     This code is for the Gener8 NPI Data Aggregation Tool
         ///
         ///     The purpose of the tool is to allow NPI Engineers within Gener8 to easily aggregate test data in the form of csv files in a large master file alongside important
@@ -103,7 +105,7 @@ namespace DataAggregator
             }
         }
 
-        // Currently don't know what this does, only that the function does not run without it
+        // I have no clue what this function does within the whole program, but the program does not work without this function
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
         }
