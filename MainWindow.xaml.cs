@@ -14,14 +14,14 @@ namespace DataAggregator
     public partial class MainWindow : Window
     {
         /// <summary>
-        ///     Udi Bahatt
-        ///     
+        ///     All code submitted prior to September 4th is written by Udi Bahatt
+        ///
         ///     This code is for the Gener8 NPI Data Aggregation Tool
         ///
         ///     The purpose of the tool is to allow NPI Engineers within Gener8 to easily aggregate test data in the form of csv files in a large master file alongside important
-        ///     metadata gathered from the files themselves. Metadata can include things such as the date the file was created, the date the test was performed, or other things 
-        ///     present in the files being combined such as firmware versions of the GUI used for testing or the name/designation of a certain machine the test was performed on. 
-        ///     
+        ///     metadata gathered from the files themselves. Metadata can include things such as the date the file was created, the date the test was performed, or other things
+        ///     present in the files being combined such as firmware versions of the GUI used for testing or the name/designation of a certain machine the test was performed on.
+        ///
         ///     On the current iteration of this code we are using Button_Format_Better_2, as it is the second version of the Button_Format_Better function.
         /// </summary>
 
@@ -213,7 +213,7 @@ namespace DataAggregator
                     // TESTING MESSAGE BOX
                     //MessageBox.Show(lineSkipArray[arrayNum].ToString(), "Notification");
 
-                    // Rreset lineSkip to 0 before going back in the loop such that we get correct data for every file present
+                    // Reset lineSkip to 0 before going back in the loop such that we get correct data for every file present
                     lineSkip = 0;
                     arrayNum++;
                 }
@@ -225,14 +225,15 @@ namespace DataAggregator
                     // Variables for use within data assignment for header data
                     // Certain variables are commented out as they aren't needed or used at the moment
                     string fileName = Path.GetFileName(s);
-                    string date_default = "N/A";
+                    //string date_default = "N/A";
                     var date_input = "N/A";
-                    //var firm_A_default = "N/A";
+                    var date_default = "N/A";
                     var firm_A_input = "N/A";
-                    //var firm_B_default = "N/A";
                     var firm_B_input = "N/A";
-                    //var firm_C_default = "N/A";
                     var firm_C_input = "N/A";
+                    //var firm_A_default = "N/A";
+                    //var firm_B_default = "N/A";
+                    //var firm_C_default = "N/A";
 
                     //// Grabbing the metadata from the file below
                     var line1 = File.ReadLines(s).First();
