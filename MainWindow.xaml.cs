@@ -543,7 +543,7 @@ namespace DataAggregator
         //
         //
         //
-
+        
         private void Button_FormatAndTransfer(object sender, RoutedEventArgs e)
         {
             /*
