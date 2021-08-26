@@ -156,7 +156,7 @@ namespace DataAggregator
                 //            SubFolder
                 System.IO.Directory.CreateDirectory(newPath);
 
-                // Copying data from aprent into newly created folder
+                // Copying data from parent into newly created folder
                 string sourcePath = parent;
                 string targetPath = newPath;
                 string copyFileName = string.Empty;
