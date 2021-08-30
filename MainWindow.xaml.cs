@@ -14,7 +14,7 @@ namespace DataAggregator
     public partial class MainWindow : Window
     {
         /// <summary>
-        ///     All code submitted prior to September 4th is written by Udi Bahatt
+        ///     All code submitted prior to September 10th is written by Udi Bahatt
         ///
         ///     This code is for the Gener8 NPI Data Aggregation Tool
         ///
