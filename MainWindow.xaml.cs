@@ -21,8 +21,13 @@ namespace DataAggregator
         ///     The purpose of the tool is to allow NPI Engineers within Gener8 to easily aggregate test data in the form of csv files in a large master file alongside important
         ///     metadata gathered from the files themselves. Metadata can include things such as the date the file was created, the date the test was performed, or other things
         ///     present in the files being combined such as firmware versions of the GUI used for testing or the name/designation of a certain machine the test was performed on.
+        ///     
+        ///     Currently the tool does not search for any metadat when formatting the files, but in the future this can be addressed post test file format standardization. 
+        ///     Please see documentation below on the parsing for metadata in order to address this, perhaps copying and slightly editing the parse code I've written for the date
+        ///     and such can be the best way to accomplish this.
         ///
-        ///     On the current iteration of this code we are using Button_Format_Better_2, as it is the second version of the Button_Format_Better function.
+        ///     On the current iteration of this code we are using Button_Format_Better_2, as it is the second version of the Button_Format_Better function. In the future this would
+        ///     be best to rename into something more professional prior to widespread release and possibly future editing as well.
         /// </summary>
 
         // Variable for use within the majority of the tool
@@ -200,7 +205,7 @@ namespace DataAggregator
                     do
                     {
                         // More specific search term, but not all GUIs return us Time (sec), just Time will be more consistent
-                        //tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)"); // More
+                        //tf = String.Equals(lineArray[t].Substring(0, 10), "Time (sec)");
                         tf = String.Equals(lineArray[t].Substring(0, 4), "Time");
                         lineSkip++;
                         t++;
@@ -328,7 +333,8 @@ namespace DataAggregator
             }
         }
 
-        // CREATING A NEW FUNCTION FOR HANDLING MISTMATCH OR MAYBE JUST ONE TO HANDLE BOTH?
+        // This function is currently being used to test new functionality if we want to include it within the final version of the tool, but in the meantime is
+        // not in use.
         private void Button_Format_Better_3(object sender, RoutedEventArgs e)
         {
             // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
