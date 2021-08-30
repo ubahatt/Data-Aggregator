@@ -7,8 +7,8 @@
         Title="Data Aggregator" Height="500" Width="1150">
     <Grid>
         <TextBox Margin="20,20,674,0" Name="file_input" Height="35" VerticalAlignment="Top" />
-        <Button Content="Open Input Folder" Margin="0,20,525,0" Name="btnOpen" Click="Button_Open_ParentFolder" HorizontalAlignment="Right" Width="144" Height="35" VerticalAlignment="Top" />
-        <Button Content="Display Folder Contents ==>" Click="Button_DisplayFolderContent" Margin="0,60,525,0" Height="35" VerticalAlignment="Top" HorizontalAlignment="Right" Width="215" />
+        <Button Content="Open Input Folder" Margin="0,20,525,0" Name="btnOpen" Click="Button_Open_Input_Folder" HorizontalAlignment="Right" Width="144" Height="35" VerticalAlignment="Top" />
+        <Button Content="Display Folder Contents ==>" Click="Button_Display_Folder_Content" Margin="0,60,525,0" Height="35" VerticalAlignment="Top" HorizontalAlignment="Right" Width="215" />
         <ListBox x:Name="myList" Margin="0,20,10,10" HorizontalAlignment="Right" Width="510" FontSize="12">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -19,12 +19,12 @@
         </ListBox>
         <TextBox x:Name="file_output" Margin="20,125,674,0" TextWrapping="Wrap" TextChanged="TextBox_TextChanged" Height="35" VerticalAlignment="Top" />
         <Button Content="Select Output Folder" Height="35
-                " Margin="0,125,525,0" VerticalAlignment="Top" Click="Button_Open_ChildFolder" HorizontalAlignment="Right" Width="144" />
+                " Margin="0,125,525,0" VerticalAlignment="Top" Click="Button_Open_Output_Folder" HorizontalAlignment="Right" Width="144" />
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Input Folder" VerticalAlignment="Top" Margin="21,4,0,0" Width="86" Height="17" />
         <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Input Folder Contents - ALL FILES PRESENT WITHIN INPUT FOLDER WILL BE USED" VerticalAlignment="Top" Margin="0,4,10,0" Width="509" Height="16" />
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Output Folder" VerticalAlignment="Top" Margin="21,108,0,0" Height="17" Width="164" />
         <Button Content="Format and Combine Data" Margin="0,0,703,23" Click="Button_Format_Better_2" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="250" />
-        <TextBlock Margin="21,0,525,113" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="193"><Run Text="Instructions for Use"/><LineBreak/><Run Text="1. Click &quot;Open Input Folder&quot; and select a folder - this folder should already contain only the files you wish to combine."/><LineBreak/><Run Text="2. In order to verify that both Input Folder is populated and contains the correct data files, click the &quot;Display Folder Contents&quot; button."/><LineBreak/><Run Text="3. Click &quot;Select Output Folder&quot; to designate an output for the combined file. "/><LineBreak/><Run Text="NOTE: Do not designate the input folder as the output folder as in future runs of the tool it will take in the master file as an input."/><LineBreak/><Run Text="4. Enter a name for the new file you are creating."/><LineBreak/><Run Text="5. Click &quot;Format and Combine Data&quot; to format selected data. A notification will pop up once finished."/></TextBlock>
+        <TextBlock Margin="21,0,525,113" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="193"><Run Text="Instructions for Use" /><LineBreak /><Run Text="1. Click &quot;Open Input Folder&quot; and select a folder - this folder should already contain only the files you wish to combine." /><LineBreak /><Run Text="2. In order to verify that both Input Folder is populated and contains the correct data files, click the &quot;Display Folder Contents&quot; button." /><LineBreak /><Run Text="3. Click &quot;Select Output Folder&quot; to designate an output for the combined file. " /><LineBreak /><Run Text="NOTE: Do not designate the input folder as the output folder as in future runs of the tool it will take in the master file as an input." /><LineBreak /><Run Text="4. Enter a name for the new file you are creating." /><LineBreak /><Run Text="5. Click &quot;Format and Combine Data&quot; to format selected data. A notification will pop up once finished." /></TextBlock>
         <TextBox x:Name="fileNameTextBox" HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="250" Margin="0,0,703,68" />
         <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" Text="Enter Name for Master File" VerticalAlignment="Bottom" Margin="0,0,788,79" Height="29" Width="164" />
     </Grid>

@@ -21,8 +21,8 @@ namespace DataAggregator
         ///     The purpose of the tool is to allow NPI Engineers within Gener8 to easily aggregate test data in the form of csv files in a large master file alongside important
         ///     metadata gathered from the files themselves. Metadata can include things such as the date the file was created, the date the test was performed, or other things
         ///     present in the files being combined such as firmware versions of the GUI used for testing or the name/designation of a certain machine the test was performed on.
-        ///     
-        ///     Currently the tool does not search for any metadat when formatting the files, but in the future this can be addressed post test file format standardization. 
+        ///
+        ///     Currently the tool does not search for any metadat when formatting the files, but in the future this can be addressed post test file format standardization.
         ///     Please see documentation below on the parsing for metadata in order to address this, perhaps copying and slightly editing the parse code I've written for the date
         ///     and such can be the best way to accomplish this.
         ///
@@ -43,9 +43,16 @@ namespace DataAggregator
             InitializeComponent();
         }
 
-        // Function responsible for selecting a parent folder
-        // User clicks the button opening a file explorer. Uses then selects a folder from the ones available which is then designated as "parent" from now on
-        private void Button_Open_ParentFolder(object sender, RoutedEventArgs e)
+        /// <summary>
+        ///     Button_Open_Input_Folder
+        /// 
+        ///     This function is responsible for designating a folder to be used as an Input Folder withing the tool.
+        ///     
+        ///     Use: 
+        ///     User clicks the button "Open Input Folder" to which a file explorer is opened. The user is then prompted to select a folder using 
+        ///     said file explorer and once one is selected, the field to the left displaying the folder path is shown.
+        /// </summary>
+        private void Button_Open_Input_Folder(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog openFileDlg = new System.Windows.Forms.FolderBrowserDialog();
             var result = openFileDlg.ShowDialog();
@@ -56,9 +63,15 @@ namespace DataAggregator
             parent = file_input.Text;
         }
 
-        // Function responsible for selecting a parent folder
-        // User clicks the button opening a file explorer. Uses then selects a folder from the ones available which is then designated as "parent" from now on
-        private void Button_Open_ChildFolder(object sender, RoutedEventArgs e)
+        /// <summary>
+        ///     Button_Open_Output_Folder
+        ///     
+        ///     This function is identical to Button_Open_InputFolder, but rather than designating an Input Folder is designates an Output Folder
+        ///     
+        ///     Use:
+        ///     Identical to Button_Open_InputFolder, just that the selected folder is assigned as the output location for the tool.
+        /// </summary>
+        private void Button_Open_Output_Folder(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog openFileDlg = new System.Windows.Forms.FolderBrowserDialog();
             var result = openFileDlg.ShowDialog();
@@ -69,8 +82,18 @@ namespace DataAggregator
             child = file_output.Text;
         }
 
-        // Function responsible for displaying the contents of parent folder on the textbox on the right side of the window
-        private void Button_DisplayFolderContent(object sender, RoutedEventArgs e)
+        /// <summary>
+        ///     Button_Display_Folder_Content
+        ///     
+        ///     This function displays the contents of the Input Folder in the textbox on the right side of the tool. Currently the tool shows you
+        ///     all files within the folder, but you can change that within the function by editing a line of code, causing the function to only
+        ///     display csv, txt, etc. (whatever you want). This is to verify that both Input Folder is populated, and populated with the correct 
+        ///     files.
+        ///     
+        ///     Use:
+        ///     Once clicked, displays the contents of Input Folder on the right side of the screen for users to see them. 
+        /// </summary>
+        private void Button_Display_Folder_Content(object sender, RoutedEventArgs e)
         {
             if (parent == "D:\\Testfolder")
             {
@@ -110,14 +133,30 @@ namespace DataAggregator
             }
         }
 
-        // I have no clue what this function does within the whole program, but the program does not work without this function
+        /// <summary>
+        ///     Textbox_TextChanges
+        ///     
+        ///     I don't know what this does except that I need to keep it for the tool to work.
+        ///     
+        ///     Use:
+        ///     N/A
+        /// </summary>
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
         }
 
-        // Function responsible for handling anything related to moving and formatting data
-        // Currently the structure of this function is as follows: Create a new folder within parent named "Edited Data {current date and time}", copy data from
-        // parent into said folder, edit data by adding metadata, combine all data into master folder which is named by the user
+        /// <summary>
+        ///     Button_Format_Better_2
+        ///     
+        ///     This function handles the formatting and the combination of the data within the Input Folder. It creates a new folder within the Input
+        ///     Folder, copies the files present within the Input Folder into the new folder, formats the files within the new folder by adding file
+        ///     names, file creation dates, and relevant metadata to them, then combining the files post formatting into one master file (which is 
+        ///     named by the user), and finally deleting both the formatted files and the previously created folder within the Input Folder.
+        ///     
+        ///     Use:
+        ///     User clicks the Format and Combine Button in the tool. Files are moved around, formatted, and combined (the user is updated at each step's
+        ///     completion) and after all the steps the master file can be found in the Output Folder.
+        /// </summary>
         private void Button_Format_Better_2(object sender, RoutedEventArgs e)
         {
             // Variables for use within format function
@@ -155,7 +194,7 @@ namespace DataAggregator
                 var newPath = pathString;
 
                 // Create the subfolder. You can verify in File Explorer that you have this
-                // structure in the C: drive.
+                // structure in the C: drive (or whatever drive for that matter).
                 //    Local Disk (C:)
                 //        Top-Level Folder
                 //            SubFolder
@@ -236,6 +275,9 @@ namespace DataAggregator
                     var firm_A_input = "N/A";
                     var firm_B_input = "N/A";
                     var firm_C_input = "N/A";
+
+                    // The following variables are included in the case that you wish to be able to assign metadata to them,
+                    // currently they are not in use.
                     //var firm_A_default = "N/A";
                     //var firm_B_default = "N/A";
                     //var firm_C_default = "N/A";
@@ -549,7 +591,7 @@ namespace DataAggregator
         //
         //
         //
-        
+
         private void Button_FormatAndTransfer(object sender, RoutedEventArgs e)
         {
             /*
