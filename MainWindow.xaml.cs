@@ -14,9 +14,7 @@ namespace DataAggregator
     public partial class MainWindow : Window
     {
         /// <summary>
-        ///     All code submitted prior to September 10th is written by Udi Bahatt
-        ///
-        ///     This code is for the Gener8 NPI Data Aggregation Tool
+        ///     All code submitted prior to September 9th is written by Udi Bahatt
         ///
         ///     The purpose of the tool is to allow NPI Engineers within Gener8 to easily aggregate test data in the form of csv files in a large master file alongside important
         ///     metadata gathered from the files themselves. Metadata can include things such as the date the file was created, the date the test was performed, or other things
