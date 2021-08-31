@@ -45,11 +45,11 @@ namespace DataAggregator
 
         /// <summary>
         ///     Button_Open_Input_Folder
-        /// 
+        ///
         ///     This function is responsible for designating a folder to be used as an Input Folder withing the tool.
-        ///     
-        ///     Use: 
-        ///     User clicks the button "Open Input Folder" to which a file explorer is opened. The user is then prompted to select a folder using 
+        ///
+        ///     Use:
+        ///     User clicks the button "Open Input Folder" to which a file explorer is opened. The user is then prompted to select a folder using
         ///     said file explorer and once one is selected, the field to the left displaying the folder path is shown.
         /// </summary>
         private void Button_Open_Input_Folder(object sender, RoutedEventArgs e)
@@ -65,9 +65,9 @@ namespace DataAggregator
 
         /// <summary>
         ///     Button_Open_Output_Folder
-        ///     
+        ///
         ///     This function is identical to Button_Open_InputFolder, but rather than designating an Input Folder is designates an Output Folder
-        ///     
+        ///
         ///     Use:
         ///     Identical to Button_Open_InputFolder, just that the selected folder is assigned as the output location for the tool.
         /// </summary>
@@ -84,14 +84,14 @@ namespace DataAggregator
 
         /// <summary>
         ///     Button_Display_Folder_Content
-        ///     
+        ///
         ///     This function displays the contents of the Input Folder in the textbox on the right side of the tool. Currently the tool shows you
         ///     all files within the folder, but you can change that within the function by editing a line of code, causing the function to only
-        ///     display csv, txt, etc. (whatever you want). This is to verify that both Input Folder is populated, and populated with the correct 
+        ///     display csv, txt, etc. (whatever you want). This is to verify that both Input Folder is populated, and populated with the correct
         ///     files.
-        ///     
+        ///
         ///     Use:
-        ///     Once clicked, displays the contents of Input Folder on the right side of the screen for users to see them. 
+        ///     Once clicked, displays the contents of Input Folder on the right side of the screen for users to see them.
         /// </summary>
         private void Button_Display_Folder_Content(object sender, RoutedEventArgs e)
         {
@@ -135,9 +135,9 @@ namespace DataAggregator
 
         /// <summary>
         ///     Textbox_TextChanges
-        ///     
+        ///
         ///     I don't know what this does except that I need to keep it for the tool to work.
-        ///     
+        ///
         ///     Use:
         ///     N/A
         /// </summary>
@@ -147,12 +147,12 @@ namespace DataAggregator
 
         /// <summary>
         ///     Button_Format_Better_2
-        ///     
+        ///
         ///     This function handles the formatting and the combination of the data within the Input Folder. It creates a new folder within the Input
         ///     Folder, copies the files present within the Input Folder into the new folder, formats the files within the new folder by adding file
-        ///     names, file creation dates, and relevant metadata to them, then combining the files post formatting into one master file (which is 
+        ///     names, file creation dates, and relevant metadata to them, then combining the files post formatting into one master file (which is
         ///     named by the user), and finally deleting both the formatted files and the previously created folder within the Input Folder.
-        ///     
+        ///
         ///     Use:
         ///     User clicks the Format and Combine Button in the tool. Files are moved around, formatted, and combined (the user is updated at each step's
         ///     completion) and after all the steps the master file can be found in the Output Folder.
