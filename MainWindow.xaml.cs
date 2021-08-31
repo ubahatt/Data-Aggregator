@@ -592,6 +592,7 @@ namespace DataAggregator
         //
         //
 
+        // First tranfer function
         private void Button_FormatAndTransfer(object sender, RoutedEventArgs e)
         {
             /*
@@ -721,6 +722,7 @@ namespace DataAggregator
             */
         }
 
+        // 2nd Format function, written kinda badly
         private void Button_Format_Better(object sender, RoutedEventArgs e)
         {
             // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
@@ -873,6 +875,7 @@ namespace DataAggregator
             }
         }
 
+        // Function just moves files from one point to another
         private void Button_Transfer(object sender, RoutedEventArgs e)
         {
             string fileName = "test.txt";
@@ -934,6 +937,7 @@ namespace DataAggregator
             MessageBox.Show($"{file_count} files have been transferred.", "Notification");
         }
 
+        // evolution on Button_Transfer2
         private void Button_Transfer2(object sender, RoutedEventArgs e)
         {
             // FILE COMBINATION CODE
