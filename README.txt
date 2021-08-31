@@ -32,4 +32,4 @@ CHANGELOG
 7/30/2021 - Version 1 Release.
 8/05/2021 - Automatic metadata line calculation.
 8/09/2021 - Child folder is deprecated, Tool creates new file with the date and time attached and stores edited data copy there and master file.
-8/18/2021 - Readded Child Folder Functionality - now known as "Output Folder" - due to Engineer Input.
+8/18/2021 - Restored Child Folder Functionality - now known as "Output Folder" - due to Engineer Input.
