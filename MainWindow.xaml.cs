@@ -144,12 +144,14 @@ namespace DataAggregator
         }
 
         /// <summary>
-        ///     Button_Format_Better_2
+        ///     Button_Format_Better_2 - Currently in use within the tool.
         ///
         ///     This function handles the formatting and the combination of the data within the Input Folder. It creates a new folder within the Input
         ///     Folder, copies the files present within the Input Folder into the new folder, formats the files within the new folder by adding file
         ///     names, file creation dates, and relevant metadata to them, then combining the files post formatting into one master file (which is
-        ///     named by the user), and finally deleting both the formatted files and the previously created folder within the Input Folder.
+        ///     named by the user), and finally deleting both the formatted files and the previously created folder within the Input Folder. These are 
+        ///     all independant parts of the function and do not rely on anything else such that they can each run independantly allowing for easy 
+        ///     changes in the future.
         ///
         ///     Use:
         ///     User clicks the Format and Combine Button in the tool. Files are moved around, formatted, and combined (the user is updated at each step's
