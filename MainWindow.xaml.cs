@@ -28,7 +28,7 @@ namespace DataAggregator
         ///     be best to rename into something more professional prior to widespread release and possibly future editing as well.
         /// </summary>
 
-        // Variable for use within the majority of the tool
+        // Variables for use within the majority of the tool
         private MyModel myModel;
 
         private string parent = "D:\\Testfolder";
@@ -149,8 +149,8 @@ namespace DataAggregator
         ///     This function handles the formatting and the combination of the data within the Input Folder. It creates a new folder within the Input
         ///     Folder, copies the files present within the Input Folder into the new folder, formats the files within the new folder by adding file
         ///     names, file creation dates, and relevant metadata to them, then combining the files post formatting into one master file (which is
-        ///     named by the user), and finally deleting both the formatted files and the previously created folder within the Input Folder. These are 
-        ///     all independant parts of the function and do not rely on anything else such that they can each run independantly allowing for easy 
+        ///     named by the user), and finally deleting both the formatted files and the previously created folder within the Input Folder. These are
+        ///     all independant parts of the function and do not rely on anything else such that they can each run independantly allowing for easy
         ///     changes in the future.
         ///
         ///     Use:
