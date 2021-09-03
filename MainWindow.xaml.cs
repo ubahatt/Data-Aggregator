@@ -377,6 +377,8 @@ namespace DataAggregator
 
         // This function is currently being used to test new functionality if we want to include it within the final version of the tool, but in the meantime is
         // not in use.
+        //
+        // Can honestly move this to the deprecated functions at this point, cant seem to get anywhere with it.
         private void Button_Format_Better_3(object sender, RoutedEventArgs e)
         {
             // VARIABLES ALLOWING FOR USER DEFINED FILENAMES
@@ -977,7 +979,7 @@ namespace DataAggregator
         public bool Checked { get; set; }
     }
 
-    // CLASS HANDLING MISMSATCHED STUFF, NEED TO MESH THIS STUFF IN
+    // CLASS FOR HANDLING MISMSATCHED STUFF, NEED TO MESH THIS STUFF IN
     /*
     public static class CSVHelpers
     {
