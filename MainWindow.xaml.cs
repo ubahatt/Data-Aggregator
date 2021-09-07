@@ -144,7 +144,7 @@ namespace DataAggregator
         }
 
         /// <summary>
-        ///     Button_Format_Better_2 - Currently in use within the tool.
+        ///     Button_Format_And_Combine - Currently in use within the tool.
         ///
         ///     This function handles the formatting and the combination of the data within the Input Folder. It creates a new folder within the Input
         ///     Folder, copies the files present within the Input Folder into the new folder, formats the files within the new folder by adding file
@@ -157,7 +157,7 @@ namespace DataAggregator
         ///     User clicks the Format and Combine Button in the tool. Files are moved around, formatted, and combined (the user is updated at each step's
         ///     completion) and after all the steps the master file can be found in the Output Folder.
         /// </summary>
-        private void Button_Format_Better_2(object sender, RoutedEventArgs e)
+        private void Button_Format_And_Combine(object sender, RoutedEventArgs e)
         {
             // Variables for use within format function
             int lineSkip = 0;
