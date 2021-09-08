@@ -28,7 +28,7 @@ namespace DataAggregator
         ///     be best to rename into something more professional prior to widespread release and possibly future editing as well.
         /// </summary>
 
-        // Variables for use within the majority of the tool
+        // Variable declaration for ones that see use throughout the tool
         private MyModel myModel;
 
         private string parent = "D:\\Testfolder";
